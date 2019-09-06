@@ -5,11 +5,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DigiPax.Models;
+using Microsoft.AspNetCore.Identity;
+using DigiPax.Data;
 
 namespace DigiPax.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        // any method that needs to see who the user is can invoke ^ method.
+
+        public HomeController(ApplicationDbContext ctx,
+                          UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
+            _context = ctx;
+        }
+
         public IActionResult Index()
         {
             return View();

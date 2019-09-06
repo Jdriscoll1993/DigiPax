@@ -19,11 +19,10 @@ namespace DigiPax.Models
 
 
         public int TypeId { get; set; }
-        public Type Type { get; set; }
+        public SampleType SampleType { get; set; }
 
         public int GenreId { get; set; }
         public Genre Genre { get; set; }
-
 
         public int KeyId { get; set; }
         public Key Key { get; set; }

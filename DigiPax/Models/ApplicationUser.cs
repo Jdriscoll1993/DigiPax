@@ -1,10 +1,12 @@
 ﻿
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
-namespace DigiPax.Data
+namespace DigiPax.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public int Username { get; set; }
+        [Required]
+        public string Username { get; set; }
     }
 }

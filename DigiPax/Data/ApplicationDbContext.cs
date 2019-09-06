@@ -7,10 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DigiPax.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options) { }
+            : base(options)
+        {
+
+        }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<Favorite> Favorite { get; set; }
         public DbSet<Sample> Sample { get; set; }
@@ -20,8 +23,10 @@ namespace DigiPax.Data
         public DbSet<Key> Key { get; set; }
         public DbSet<SampleType> SampleType { get; set; }
 
-
-
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
 
