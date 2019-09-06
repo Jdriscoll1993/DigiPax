@@ -7,6 +7,8 @@ namespace DigiPax.Models
     public class ApplicationUser : IdentityUser
     {
         [Required]
-        public string Username { get; set; }
+        [Display(Name = "Screen Name")]
+
+        public string ScreenName { get; set; }
     }
 }

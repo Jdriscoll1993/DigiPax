@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigiPax.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190906015630_Initial")]
+    [Migration("20190906143138_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,15 +52,15 @@ namespace DigiPax.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<string>("ScreenName")
+                        .IsRequired();
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
-
-                    b.Property<string>("Username")
-                        .IsRequired();
 
                     b.HasKey("Id");
 

@@ -50,15 +50,15 @@ namespace DigiPax.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<string>("ScreenName")
+                        .IsRequired();
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
-
-                    b.Property<string>("Username")
-                        .IsRequired();
 
                     b.HasKey("Id");
 

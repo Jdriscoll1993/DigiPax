@@ -41,7 +41,7 @@ namespace DigiPax.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    Username = table.Column<string>(nullable: false)
+                    ScreenName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
