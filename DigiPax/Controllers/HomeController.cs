@@ -29,7 +29,7 @@ namespace DigiPax.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Import()
         {
             return View();
         }
