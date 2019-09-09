@@ -10,7 +10,7 @@ namespace DigiPax.Models
     public class Sample
     {
         [Key]
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         [Display(Name = "Sample Name")]
         public string SampleName { get; set; }

@@ -183,7 +183,7 @@ namespace DigiPax.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SampleExists(int id)
+        private bool SampleExists(int? id)
         {
             return _context.Sample.Any(e => e.Id == id);
         }
