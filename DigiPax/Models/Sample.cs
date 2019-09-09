@@ -13,8 +13,9 @@ namespace DigiPax.Models
         public int Id { get; set; }
         public string SampleName { get; set; }
         public string SamplePath { get; set; }
-        
-        public int ApplicationUserId { get; set; }
+
+        [Required]
+        public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
 
 
