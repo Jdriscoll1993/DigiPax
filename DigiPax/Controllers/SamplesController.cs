@@ -7,17 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DigiPax.Data;
 using DigiPax.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace DigiPax.Controllers
 {
     public class SamplesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public SamplesController(ApplicationDbContext context)
+        public SamplesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Samples
         public async Task<IActionResult> Index()
@@ -46,29 +53,47 @@ namespace DigiPax.Controllers
             return View(sample);
         }
 
+        [Authorize]
         // GET: Samples/Create
         public IActionResult Create()
         {
-            ViewData["GenreId"] = new SelectList(_context.Genre, "Id", "Id");
-            ViewData["KeyId"] = new SelectList(_context.Key, "Id", "Id");
+            ViewData["TypeId"] = new SelectList(_context.SampleType, "TypeId", "Label");
+            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Label");
+            ViewData["KeyId"] = new SelectList(_context.Key, "KeyId", "Label");
+            ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id");
             return View();
         }
 
-        // POST: Samples/Create
+        // POST: Products/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Username,SampleName,SampleId,ApplicationUserId,TypeId,GenreId,KeyId,SamplePath")] Sample sample)
+        public async Task<IActionResult> Create([Bind("Id,SampleName,TypeId,GenreId,KeyId,SamplePath")] Sample sample, IFormFile file)
         {
+            var path = Path.Combine(
+                  Directory.GetCurrentDirectory(), "wwwroot",
+                  "AudioFiles", file.FileName);
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            ApplicationUser user = await GetCurrentUserAsync();
+            sample.ApplicationUserId = user.Id;
+            sample.SamplePath = "AudioFiles/" + file.FileName;
+            ModelState.Remove("ApplicationUserId");
             if (ModelState.IsValid)
             {
                 _context.Add(sample);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = sample.Id });
             }
-            ViewData["GenreId"] = new SelectList(_context.Genre, "Id", "Id", sample.GenreId);
-            ViewData["KeyId"] = new SelectList(_context.Key, "Id", "Id", sample.KeyId);
+            ViewData["TypeId"] = new SelectList(_context.SampleType, "TypeId", "Label", sample.TypeId);
+            ViewData["GenreId"] = new SelectList(_context.Key, "KeyId", "Label", sample.KeyId);
+            ViewData["KeyId"] = new SelectList(_context.Genre, "GenreId", "Label", sample.GenreId);
+            ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", sample.ApplicationUserId);
             return View(sample);
         }
 
