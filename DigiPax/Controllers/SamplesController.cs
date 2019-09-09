@@ -59,7 +59,7 @@ namespace DigiPax.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SampleName,SamplePath,ApplicationUserId,TypeId,GenreId,KeyId")] Sample sample)
+        public async Task<IActionResult> Create([Bind("Username,SampleName,SampleId,ApplicationUserId,TypeId,GenreId,KeyId,SamplePath")] Sample sample)
         {
             if (ModelState.IsValid)
             {
