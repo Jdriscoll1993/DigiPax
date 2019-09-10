@@ -40,7 +40,11 @@ namespace DigiPax.Controllers
                           .Include(s => s.MusicKey)
                           .Include(s => s.ApplicationUser)
                           select s;
-            switch(sortOrder)
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                samples = samples.Where(s => s.SampleName.Contains(searchString));
+            } 
+            switch (sortOrder)
             {
                 case "sampleName_desc":
                     samples = samples.OrderByDescending(s => s.SampleName);
