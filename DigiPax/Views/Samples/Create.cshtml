@@ -1,4 +1,4 @@
-﻿@model DigiPax.Models.Sample
+﻿@model DigiPax.Models.ViewModels.SampleCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -10,35 +10,31 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="SampleName" class="control-label"></label>
-                <input asp-for="SampleName" class="form-control" />
-                <span asp-validation-for="SampleName" class="text-danger"></span>
+                <label asp-for="Sample.SampleName" class="control-label"></label>
+                <input asp-for="Sample.SampleName" class="form-control"/>
+                <span asp-validation-for="Sample.SampleName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SamplePath" class="control-label"></label>
-                <input asp-for="SamplePath" class="form-control" />
-                <span asp-validation-for="SamplePath" class="text-danger"></span>
+                <label asp-for="Sample.SampleTypeId" class="control-label"></label>
+                <select asp-for="Sample.SampleTypeId" class="form-control"/>
+                <span asp-validation-for="Sample.SampleTypeId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ApplicationUserId" class="control-label"></label>
-                <input asp-for="ApplicationUserId" class="form-control" />
-                <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
+                <label asp-for="Sample.GenreId" class="control-label"></label>
+                <select asp-for="Sample.GenreId" class="for-control"></select>
+                <span asp-validation-for="Sample.GenreId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TypeId" class="control-label"></label>
-                <input asp-for="TypeId" class="form-control" />
-                <span asp-validation-for="TypeId" class="text-danger"></span>
+                <label asp-for="Sample.KeyId" class="control-label"></label>
+                <select asp-for="Sample.KeyId" class="form-control"></select>
+                <span asp-validation-for="Sample.KeyId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GenreId" class="control-label"></label>
-                <select asp-for="GenreId" class ="form-control" asp-items="ViewBag.GenreId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="KeyId" class="control-label"></label>
-                <select asp-for="KeyId" class ="form-control" asp-items="ViewBag.KeyId"></select>
+                <p>Upload an Audio File</p>
+                <input type="file" name="file" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
