@@ -9,7 +9,6 @@ namespace DigiPax.Models
     {
         [Required]
         [Display(Name = "Screen Name")]
-
         public string ScreenName { get; set; }
 
         public virtual ICollection<Sample> Samples { get; set; }
