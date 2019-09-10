@@ -20,19 +20,19 @@
 
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.SampleName)
+                @Html.ActionLink("Sample Name", "Index", new { sortOrder = ViewBag.NameSortParm })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ApplicationUserId)
+                @Html.ActionLink("Author", "Index", new { sortOrder = ViewBag.NameSortParm })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SampleType)
+                @Html.ActionLink("Type", "Index", new { sortOrder = ViewBag.NameSortParm })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Genre)
+                @Html.ActionLink("Genre", "Index", new { sortOrder = ViewBag.NameSortParm })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MusicKey)
+                @Html.ActionLink("Key", "Index", new { sortOrder = ViewBag.NameSortParm })
             </th>
 
         </tr>

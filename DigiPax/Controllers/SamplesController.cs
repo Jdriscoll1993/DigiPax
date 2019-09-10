@@ -28,8 +28,10 @@ namespace DigiPax.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Samples
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, string sortOrder)
         {
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
             // Grabs samples from contexts, if search string exists samples are filtered by search
 
             var samples = from s in _context.Sample
@@ -38,53 +40,31 @@ namespace DigiPax.Controllers
                           .Include(s => s.MusicKey)
                           .Include(s => s.ApplicationUser)
                           select s;
+            switch(sortOrder)
+            {
+                case "sampleName_desc":
+                    samples = samples.OrderByDescending(s => s.SampleName);
+                    break;
+                case "genre_desc":
+                    samples = samples.OrderByDescending(s => s.Genre);
+                    break;
+                case "sampleType_desc":
+                    samples = samples.OrderByDescending(s => s.SampleType);
+                    break;
+                case "musicKey":
+                    samples = samples.OrderBy(s => s.MusicKey);
+                    break;
+            }
             var applicationDbContext = samples;
 
             if (!String.IsNullOrEmpty(searchString))
             {
                 samples = samples.Where(s => s.SampleName.Contains(searchString));
             }
-            return View(await applicationDbContext.ToListAsync());
+            return View(samples.ToList());
 
         }
 
-        public async Task<IActionResult> SearchSamples(string searchString)
-        {
-            //Grabs samples from contexts, if search string exists samples are filtered by search
-
-            var samples = from s in _context.Sample
-                          .Include(s => s.Genre)
-                          .Include(s => s.SampleType)
-                          .Include(s => s.MusicKey)
-                          .Include(s => s.ApplicationUser)
-                          select s;
-            var applicationDbContext = samples;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                samples = samples.Where(s => s.SampleName.Contains(searchString));
-            }
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        //// GET: UserSamples
-        //public async Task<IActionResult> MySamples()
-        //{
-        //    var samples = await _context.Sample
-        //        .Where(s => s.ApplicationUserId == _userManager.GetUserId(User))
-        //        .Include(s => s.Key)
-        //        .Include(s => s.SampleType)
-        //        .Include(s => s.Genre)
-        //        .ToListAsync();
-
-        //    var mySamples = samples.Select(sample => new SampleCreateViewModel()
-        //    {
-        //        Sample = sample,
-        //    }).ToList();
-
-
-        //    return View();
-        //}
 
         // GET: Samples/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -127,7 +107,7 @@ namespace DigiPax.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SampleName,SampleTypeId,GenreId,KeyId,SamplePath")] Sample sample, IFormFile file)
+        public async Task<IActionResult> Create([Bind("Id,SampleName,SampleTypeId,GenreId,KeyId,SamplePath")] Sample sample, SampleCreateViewModel svm, IFormFile file)
         {
             var path = Path.Combine(
                   Directory.GetCurrentDirectory(), "wwwroot",
@@ -144,11 +124,12 @@ namespace DigiPax.Controllers
             ModelState.Remove("ApplicationUserId");
             if (ModelState.IsValid)
             {
-                _context.Add(sample);
+                _context.Add(svm);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = sample.Id });
             }
-            return View(sample);
+
+            return View(svm);
         }
 
         // GET: Samples/Edit/5
@@ -242,5 +223,42 @@ namespace DigiPax.Controllers
             return _context.Sample.Any(e => e.Id == id);
         }
 
+        public async Task<IActionResult> SearchSamples(string searchString)
+        {
+            //Grabs samples from contexts, if search string exists samples are filtered by search
+
+            var samples = from s in _context.Sample
+                          .Include(s => s.Genre)
+                          .Include(s => s.SampleType)
+                          .Include(s => s.MusicKey)
+                          .Include(s => s.ApplicationUser)
+                          select s;
+            var applicationDbContext = samples;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                samples = samples.Where(s => s.SampleName.Contains(searchString));
+            }
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        //// GET: UserSamples
+        //public async Task<IActionResult> MySamples()
+        //{
+        //    var samples = await _context.Sample
+        //        .Where(s => s.ApplicationUserId == _userManager.GetUserId(User))
+        //        .Include(s => s.Key)
+        //        .Include(s => s.SampleType)
+        //        .Include(s => s.Genre)
+        //        .ToListAsync();
+
+        //    var mySamples = samples.Select(sample => new SampleCreateViewModel()
+        //    {
+        //        Sample = sample,
+        //    }).ToList();
+
+
+        //    return View();
+        //}
     }
 }
