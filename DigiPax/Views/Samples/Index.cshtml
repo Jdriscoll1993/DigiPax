@@ -1,5 +1,6 @@
-﻿@model IEnumerable<DigiPax.Models.Sample>
-
+﻿@model X.PagedList.IPagedList<DigiPax.Models.Sample>
+@using X.PagedList.Mvc.Core;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
     ViewData["Title"] = "Sample Pool";
 }
@@ -9,10 +10,10 @@
 <p>
     <a asp-action="Create">Add a Sample</a>
 </p>
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "Sample", FormMethod.Get))
 {
     <p>
-        Find by name: @Html.TextBox("SearchString")
+        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
         <input type="submit" value="Search" />
     </p>
 }
@@ -21,19 +22,19 @@
 
         <tr>
             <th>
-                @Html.ActionLink("Sample Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+                @Html.ActionLink("Sample Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.ActionLink("Author", "Index", new { sortOrder = ViewBag.NameSortParm })
+                @Html.ActionLink("Author", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.ActionLink("Type", "Index", new { sortOrder = ViewBag.NameSortParm })
+                @Html.ActionLink("Type", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.ActionLink("Genre", "Index", new { sortOrder = ViewBag.NameSortParm })
+                @Html.ActionLink("Genre", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.ActionLink("Key", "Index", new { sortOrder = ViewBag.NameSortParm })
+                @Html.ActionLink("Key", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
 
         </tr>
@@ -70,4 +71,9 @@
 
     </tbody>
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 

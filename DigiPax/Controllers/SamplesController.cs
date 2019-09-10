@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using DigiPax.Models.ViewModels;
+using X.PagedList;
 
 namespace DigiPax.Controllers
 {
@@ -28,11 +29,23 @@ namespace DigiPax.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Samples
-        public async Task<IActionResult> Index(string searchString, string sortOrder)
+        public async Task<IActionResult> Index(string searchString, string sortOrder, string currentFilter, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
+
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
             // Grabs samples from contexts, if search string exists samples are filtered by search
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
 
             var samples = from s in _context.Sample
                           .Include(s => s.Genre)
@@ -43,7 +56,7 @@ namespace DigiPax.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 samples = samples.Where(s => s.SampleName.Contains(searchString));
-            } 
+            }
             switch (sortOrder)
             {
                 case "sampleName_desc":
@@ -65,7 +78,9 @@ namespace DigiPax.Controllers
             {
                 samples = samples.Where(s => s.SampleName.Contains(searchString));
             }
-            return View(samples.ToList());
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(samples.ToPagedList(pageNumber, pageSize));
 
         }
 
