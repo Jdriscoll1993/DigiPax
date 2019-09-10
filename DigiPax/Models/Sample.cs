@@ -26,11 +26,14 @@ namespace DigiPax.Models
         [Required]
         [Display(Name = "Type")]
         public int SampleTypeId { get; set; }
+        [Display(Name = "Type")]
         public SampleType SampleType { get; set; }
+
         [Required]
         [Display(Name = "Genre")]
         public int GenreId { get; set; }
         public Genre Genre { get; set; }
+
         [Required]
         [Display(Name = "Key")]
         public int KeyId { get; set; }

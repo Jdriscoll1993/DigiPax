@@ -5,6 +5,7 @@ using DigiPax.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using DigiPax.Models.ViewModels;
 
 namespace DigiPax.Data
 {

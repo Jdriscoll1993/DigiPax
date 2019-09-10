@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
 using Microsoft.AspNetCore.Http;
-using DigiPax.Models.ViewModels;
 
 namespace DigiPax.Controllers
 {
@@ -34,7 +33,9 @@ namespace DigiPax.Controllers
 
             var samples = from s in _context.Sample
                           .Include(s => s.Genre)
-                          .Include(s => s.Key).Include(s => s.ApplicationUser)
+                          .Include(s => s.SampleType)
+                          .Include(s => s.Key)
+                          .Include(s => s.ApplicationUser)
                           select s;
             var applicationDbContext = samples;
 
@@ -43,17 +44,18 @@ namespace DigiPax.Controllers
                 samples = samples.Where(s => s.SampleName.Contains(searchString));
             }
             return View(await applicationDbContext.ToListAsync());
-        
+
         }
-        //
+
         public async Task<IActionResult> Search(string searchString)
         {
-            // Grabs samples from contexts, if search string exists samples are filtered by search
+            //Grabs samples from contexts, if search string exists samples are filtered by search
 
-            var samples = from s in _context.Sample
-                          .Include(s => s.Genre)
-                          .Include(s => s.Key).Include(s => s.ApplicationUser)
-                          select s;
+           var samples = from s in _context.Sample
+                         .Include(s => s.Genre)
+                         .Include(s => s.SampleType)
+                         .Include(s => s.Key).Include(s => s.ApplicationUser)
+                         select s;
             var applicationDbContext = samples;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -63,24 +65,24 @@ namespace DigiPax.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: UserSamples
-        public async Task<IActionResult> MySamples()
-        {
-            var samples = await _context.Sample
-                .Where(s => s.ApplicationUserId == _userManager.GetUserId(User))
-                .Include(s => s.Key)
-                    .Include(s => s.SampleType)
-                .Include(s => s.Genre)
-                .ToListAsync();
+        //// GET: UserSamples
+        //public async Task<IActionResult> MySamples()
+        //{
+        //    var samples = await _context.Sample
+        //        .Where(s => s.ApplicationUserId == _userManager.GetUserId(User))
+        //        .Include(s => s.Key)
+        //        .Include(s => s.SampleType)
+        //        .Include(s => s.Genre)
+        //        .ToListAsync();
 
-            var mySamples = samples.Select(sample => new SampleCreateViewModel()
-            {
-                Sample = sample,
-            }).ToList();
+        //    var mySamples = samples.Select(sample => new SampleCreateViewModel()
+        //    {
+        //        Sample = sample,
+        //    }).ToList();
 
 
-            return View();
-        }
+        //    return View();
+        //}
 
         // GET: Samples/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -92,6 +94,7 @@ namespace DigiPax.Controllers
 
             var sample = await _context.Sample
                 .Include(s => s.Genre.Name)
+                .Include(s => s.SampleType)
                 .Include(s => s.Key.Name)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (sample == null)
@@ -107,7 +110,7 @@ namespace DigiPax.Controllers
         // GET: Samples/Create
         public IActionResult Create()
         {
-            ViewData["TypeId"] = new SelectList(_context.SampleType, "TypeId", "Label");
+            ViewData["SampleTypeId"] = new SelectList(_context.SampleType, "SampleTypeId", "Label");
             ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Label");
             ViewData["KeyId"] = new SelectList(_context.Key, "KeyId", "Label");
             ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id");
@@ -119,7 +122,7 @@ namespace DigiPax.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SampleName,TypeId,GenreId,KeyId,SamplePath")] Sample sample, IFormFile file)
+        public async Task<IActionResult> Create([Bind("Id,SampleName,SampleTypeId,GenreId,KeyId,SamplePath")] Sample sample, IFormFile file)
         {
             var path = Path.Combine(
                   Directory.GetCurrentDirectory(), "wwwroot",
@@ -140,7 +143,7 @@ namespace DigiPax.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = sample.Id });
             }
-            ViewData["TypeId"] = new SelectList(_context.SampleType, "TypeId", "Label", sample.SampleTypeId);
+            ViewData["SampleTypeId"] = new SelectList(_context.SampleType, "SampleTypeId", "Label", sample.SampleTypeId);
             ViewData["GenreId"] = new SelectList(_context.Key, "KeyId", "Label", sample.KeyId);
             ViewData["KeyId"] = new SelectList(_context.Genre, "GenreId", "Label", sample.GenreId);
             ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", sample.ApplicationUserId);
