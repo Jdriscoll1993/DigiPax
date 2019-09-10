@@ -10,19 +10,19 @@ using DigiPax.Models;
 
 namespace DigiPax.Controllers
 {
-    public class KeysController : Controller
+    public class MusicKeysController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public KeysController(ApplicationDbContext context)
+        public MusicKeysController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Keys
+        // GET: MusicKeys
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Key.ToListAsync());
+            return View(await _context.MusicKey.ToListAsync());
         }
 
         // GET: Keys/Details/5
@@ -33,14 +33,14 @@ namespace DigiPax.Controllers
                 return NotFound();
             }
 
-            var key = await _context.Key
+            var musicKey = await _context.MusicKey
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (key == null)
+            if (musicKey == null)
             {
                 return NotFound();
             }
 
-            return View(key);
+            return View(musicKey);
         }
 
         // GET: Keys/Create
@@ -54,18 +54,18 @@ namespace DigiPax.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Key key)
+        public async Task<IActionResult> Create([Bind("Id,Name")] MusicKey musicKey)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(key);
+                _context.Add(musicKey);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(key);
+            return View(musicKey);
         }
 
-        // GET: Keys/Edit/5
+        // GET: MusicKeys/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,20 +73,20 @@ namespace DigiPax.Controllers
                 return NotFound();
             }
 
-            var key = await _context.Key.FindAsync(id);
-            if (key == null)
+            var musicKey = await _context.MusicKey.FindAsync(id);
+            if (musicKey == null)
             {
                 return NotFound();
             }
-            return View(key);
+            return View(musicKey);
         }
 
-        // POST: Keys/Edit/5
+        // POST: MusicKeys/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Key key)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] MusicKey key)
         {
             if (id != key.Id)
             {
@@ -102,7 +102,7 @@ namespace DigiPax.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!KeyExists(key.Id))
+                    if (!MusicKeyExists(key.Id))
                     {
                         return NotFound();
                     }
@@ -116,7 +116,7 @@ namespace DigiPax.Controllers
             return View(key);
         }
 
-        // GET: Keys/Delete/5
+        // GET: MusicKeys/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,7 +124,7 @@ namespace DigiPax.Controllers
                 return NotFound();
             }
 
-            var key = await _context.Key
+            var key = await _context.MusicKey
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (key == null)
             {
@@ -134,20 +134,20 @@ namespace DigiPax.Controllers
             return View(key);
         }
 
-        // POST: Keys/Delete/5
+        // POST: MusicKeys/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var key = await _context.Key.FindAsync(id);
-            _context.Key.Remove(key);
+            var key = await _context.MusicKey.FindAsync(id);
+            _context.MusicKey.Remove(key);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool KeyExists(int id)
+        private bool MusicKeyExists(int id)
         {
-            return _context.Key.Any(e => e.Id == id);
+            return _context.MusicKey.Any(e => e.Id == id);
         }
     }
 }

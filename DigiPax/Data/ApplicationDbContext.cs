@@ -22,7 +22,7 @@ namespace DigiPax.Data
         public DbSet<PackSample> PackSample { get; set; }
         public DbSet<Pack> Pack { get; set; }
         public DbSet<Genre> Genre { get; set; }
-        public DbSet<Key> Key { get; set; }
+        public DbSet<MusicKey> MusicKey { get; set; }
         public DbSet<SampleType> SampleType { get; set; }
 
         // seed data:
@@ -30,6 +30,18 @@ namespace DigiPax.Data
         //user
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Genre>()
+                .HasMany(g => g.Samples)
+                .WithOne(s => s.Genre)
+                .HasForeignKey(s => s.GenreId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Sample>()
+                 .HasOne(s => s.Genre)
+                 .WithMany(g => g.Samples)
+                 .HasForeignKey(s => s.GenreId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(modelBuilder);
             ApplicationUser user = new ApplicationUser
             {
@@ -48,17 +60,6 @@ namespace DigiPax.Data
             user.PasswordHash = passwordHash.HashPassword(user, "Password");
             modelBuilder.Entity<ApplicationUser>().HasData(user);
 
-            modelBuilder.Entity<Sample>().HasData(
-                new Sample()
-                {
-                    SampleName = "Test Sample",
-                    SamplePath = "/AudioFiles",
-                    ApplicationUserId = user.Id,
-                    Id = 1,
-                    SampleTypeId = 1,
-                    KeyId = 1,
-                    GenreId = 1,
-                });
 
             //GENRE
             modelBuilder.Entity<Genre>().HasData(
@@ -252,6 +253,17 @@ namespace DigiPax.Data
                     Name = "Dubstep"
                 });
 
+            modelBuilder.Entity<Sample>().HasData(
+                new Sample()
+                {
+                    SampleName = "Test Sample",
+                    SamplePath = "/AudioFiles",
+                    ApplicationUserId = user.Id,
+                    Id = 1,
+                    SampleTypeId = 1,
+                    MusicKeyId = 1,
+                    GenreId = 1,
+                });
             //TYPE
             modelBuilder.Entity<SampleType>().HasData(
                 new SampleType()
@@ -302,7 +314,7 @@ namespace DigiPax.Data
                 new SampleType()
                 {
                     Id = 10,
-                    Name = "Keys"
+                    Name = "MusicKeys"
                 },
                 new SampleType()
                 {
@@ -431,89 +443,89 @@ namespace DigiPax.Data
                 });
 
             //KEY
-            modelBuilder.Entity<Key>().HasData(
-                new Key()
-                // Root Keys
+            modelBuilder.Entity<MusicKey>().HasData(
+                new MusicKey()
+                // Root MusicKeys
                 {
                     Id = 1,
                     Name = "C"
                 },
-                new Key()
+                new MusicKey()
                 {
                     Id = 2,
                     Name = "D"
                 },
-                new Key()
+                new MusicKey()
                 {
                     Id = 3,
                     Name = "E"
                 },
-                new Key()
+                new MusicKey()
                 {
                     Id = 4,
                     Name = "F"
                 },
-                new Key()
+                new MusicKey()
                 {
                     Id = 5,
                     Name = "G"
                 },
-                new Key()
+                new MusicKey()
                 {
                     Id = 6,
                     Name = "A"
                 },
-                new Key()
+                new MusicKey()
                 {
                     Id = 7,
                     Name = "B"
                 },
                 // Flats
-                new Key()
+                new MusicKey()
                 {
                     Id = 8,
                     Name = "Db"
                 },
-                new Key()
+                new MusicKey()
                 {
                     Id = 9,
                     Name = "Eb"
                 },
-                new Key()
+                new MusicKey()
                 {
                     Id = 10,
                     Name = "Gb"
                 },
-                new Key()
+                new MusicKey()
                 {
                     Id = 11,
                     Name = "Ab"
                 },
-                new Key()
+                new MusicKey()
                 {
                     Id = 12,
                     Name = "Bb"
                 },
                 // Sharps
-                new Key()
+                new MusicKey()
                 {
                     Id = 13,
                     Name = "C#"
                 },
-                new Key()
+                new MusicKey()
                 {
                     Id = 14,
                     Name = "D#"
                 },
-                new Key()
+                new MusicKey()
                 {
                     Id = 15,
                     Name = "F#"
-                }, new Key()
+                }, new MusicKey()
                 {
                     Id = 16,
                     Name = "G#"
-                }, new Key()
+                }, new MusicKey()
                 {
                     Id = 17,
                     Name = "A#"

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using DigiPax.Models.ViewModels;
 
 namespace DigiPax.Controllers
 {
@@ -34,7 +35,7 @@ namespace DigiPax.Controllers
             var samples = from s in _context.Sample
                           .Include(s => s.Genre)
                           .Include(s => s.SampleType)
-                          .Include(s => s.Key)
+                          .Include(s => s.MusicKey)
                           .Include(s => s.ApplicationUser)
                           select s;
             var applicationDbContext = samples;
@@ -47,15 +48,16 @@ namespace DigiPax.Controllers
 
         }
 
-        public async Task<IActionResult> Search(string searchString)
+        public async Task<IActionResult> SearchSamples(string searchString)
         {
             //Grabs samples from contexts, if search string exists samples are filtered by search
 
-           var samples = from s in _context.Sample
-                         .Include(s => s.Genre)
-                         .Include(s => s.SampleType)
-                         .Include(s => s.Key).Include(s => s.ApplicationUser)
-                         select s;
+            var samples = from s in _context.Sample
+                          .Include(s => s.Genre)
+                          .Include(s => s.SampleType)
+                          .Include(s => s.MusicKey)
+                          .Include(s => s.ApplicationUser)
+                          select s;
             var applicationDbContext = samples;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -93,9 +95,9 @@ namespace DigiPax.Controllers
             }
 
             var sample = await _context.Sample
-                .Include(s => s.Genre.Name)
+                .Include(s => s.Genre)
                 .Include(s => s.SampleType)
-                .Include(s => s.Key.Name)
+                .Include(s => s.MusicKey)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (sample == null)
             {
@@ -108,13 +110,16 @@ namespace DigiPax.Controllers
 
         [Authorize]
         // GET: Samples/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            ViewData["SampleTypeId"] = new SelectList(_context.SampleType, "SampleTypeId", "Label");
-            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Label");
-            ViewData["KeyId"] = new SelectList(_context.Key, "KeyId", "Label");
-            ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id");
-            return View();
+            var viewModel = new SampleCreateViewModel();
+            viewModel.MusicKeys = new SelectList(await _context.MusicKey.ToListAsync(), "Id", "Name");
+            viewModel.Genres = new SelectList(await _context.Genre.ToListAsync(), "Id", "Name");
+            viewModel.SampleTypes = new SelectList(await _context.SampleType.ToListAsync(), "Id", "Name");
+
+
+            return View(viewModel);
         }
 
         // POST: Products/Create
@@ -143,10 +148,6 @@ namespace DigiPax.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = sample.Id });
             }
-            ViewData["SampleTypeId"] = new SelectList(_context.SampleType, "SampleTypeId", "Label", sample.SampleTypeId);
-            ViewData["GenreId"] = new SelectList(_context.Key, "KeyId", "Label", sample.KeyId);
-            ViewData["KeyId"] = new SelectList(_context.Genre, "GenreId", "Label", sample.GenreId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", sample.ApplicationUserId);
             return View(sample);
         }
 
@@ -164,7 +165,7 @@ namespace DigiPax.Controllers
                 return NotFound();
             }
             ViewData["GenreId"] = new SelectList(_context.Genre, "Id", "Id", sample.GenreId);
-            ViewData["KeyId"] = new SelectList(_context.Key, "Id", "Id", sample.KeyId);
+            ViewData["KeyId"] = new SelectList(_context.MusicKey, "Id", "Id", sample.MusicKeyId);
             return View(sample);
         }
 
@@ -201,7 +202,7 @@ namespace DigiPax.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["GenreId"] = new SelectList(_context.Genre, "Id", "Id", sample.GenreId);
-            ViewData["KeyId"] = new SelectList(_context.Key, "Id", "Id", sample.KeyId);
+            ViewData["KeyId"] = new SelectList(_context.MusicKey, "Id", "Id", sample.MusicKeyId);
             return View(sample);
         }
 
@@ -215,7 +216,7 @@ namespace DigiPax.Controllers
 
             var sample = await _context.Sample
                 .Include(s => s.Genre)
-                .Include(s => s.Key)
+                .Include(s => s.MusicKey)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (sample == null)
             {
@@ -240,5 +241,6 @@ namespace DigiPax.Controllers
         {
             return _context.Sample.Any(e => e.Id == id);
         }
+
     }
 }

@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace DigiPax.Models
 {
-    public class Key
+    public class MusicKey
     {
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
+        public virtual ICollection<Sample> Samples { get; set; }
+
 
     }
 }

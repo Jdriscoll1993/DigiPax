@@ -77,13 +77,13 @@ namespace DigiPax.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3890101f-9094-40e3-9abd-f69aa98b3e77",
+                            ConcurrencyStamp = "6f203fa2-6cb7-4ecc-9304-f2f0f19abc45",
                             Email = "joey@driscoll.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "JOEY@DRISCOLL.COM",
                             NormalizedUserName = "JOEYALAKING",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPqkFG7WUWZMG3xUOpbpW05LN72xAMbI7iBnqFEduRM1jlgvU9XLDc0ZiwA4/4yGcA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAENgJFD6A/KXpYQjWk9S6uRQFveShJVj9YkX243nSshwX/E+6x+aWaUSGXKoevHYw==",
                             PhoneNumberConfirmed = false,
                             ScreenName = "Joey",
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
@@ -308,7 +308,7 @@ namespace DigiPax.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DigiPax.Models.Key", b =>
+            modelBuilder.Entity("DigiPax.Models.MusicKey", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -318,7 +318,7 @@ namespace DigiPax.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Key");
+                    b.ToTable("MusicKey");
 
                     b.HasData(
                         new
@@ -439,7 +439,8 @@ namespace DigiPax.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PackId");
+                    b.HasIndex("PackId")
+                        .IsUnique();
 
                     b.HasIndex("SampleId");
 
@@ -457,7 +458,7 @@ namespace DigiPax.Migrations
 
                     b.Property<int>("GenreId");
 
-                    b.Property<int>("KeyId");
+                    b.Property<int>("MusicKeyId");
 
                     b.Property<string>("SampleName")
                         .IsRequired();
@@ -472,7 +473,7 @@ namespace DigiPax.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.HasIndex("KeyId");
+                    b.HasIndex("MusicKeyId");
 
                     b.HasIndex("SampleTypeId");
 
@@ -484,7 +485,7 @@ namespace DigiPax.Migrations
                             Id = 1,
                             ApplicationUserId = "00000000-ffff-ffff-ffff-ffffffffffff",
                             GenreId = 1,
-                            KeyId = 1,
+                            MusicKeyId = 1,
                             SampleName = "Test Sample",
                             SamplePath = "/AudioFiles",
                             SampleTypeId = 1
@@ -552,7 +553,7 @@ namespace DigiPax.Migrations
                         new
                         {
                             Id = 10,
-                            Name = "Keys"
+                            Name = "MusicKeys"
                         },
                         new
                         {
@@ -817,8 +818,8 @@ namespace DigiPax.Migrations
             modelBuilder.Entity("DigiPax.Models.PackSample", b =>
                 {
                     b.HasOne("DigiPax.Models.Pack", "Pack")
-                        .WithMany()
-                        .HasForeignKey("PackId")
+                        .WithOne("PackSample")
+                        .HasForeignKey("DigiPax.Models.PackSample", "PackId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DigiPax.Models.Sample", "Sample")
@@ -835,17 +836,17 @@ namespace DigiPax.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DigiPax.Models.Genre", "Genre")
-                        .WithMany()
+                        .WithMany("Samples")
                         .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("DigiPax.Models.Key", "Key")
-                        .WithMany()
-                        .HasForeignKey("KeyId")
+                    b.HasOne("DigiPax.Models.MusicKey", "MusicKey")
+                        .WithMany("Samples")
+                        .HasForeignKey("MusicKeyId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DigiPax.Models.SampleType", "SampleType")
-                        .WithMany()
+                        .WithMany("Samples")
                         .HasForeignKey("SampleTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

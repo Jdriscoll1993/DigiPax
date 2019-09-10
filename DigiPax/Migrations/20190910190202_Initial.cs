@@ -62,7 +62,7 @@ namespace DigiPax.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Key",
+                name: "MusicKey",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -71,7 +71,7 @@ namespace DigiPax.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Key", x => x.Id);
+                    table.PrimaryKey("PK_MusicKey", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -225,7 +225,7 @@ namespace DigiPax.Migrations
                     ApplicationUserId = table.Column<string>(nullable: false),
                     SampleTypeId = table.Column<int>(nullable: false),
                     GenreId = table.Column<int>(nullable: false),
-                    KeyId = table.Column<int>(nullable: false)
+                    MusicKeyId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -241,11 +241,11 @@ namespace DigiPax.Migrations
                         column: x => x.GenreId,
                         principalTable: "Genre",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Sample_Key_KeyId",
-                        column: x => x.KeyId,
-                        principalTable: "Key",
+                        name: "FK_Sample_MusicKey_MusicKeyId",
+                        column: x => x.MusicKeyId,
+                        principalTable: "MusicKey",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -312,7 +312,7 @@ namespace DigiPax.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ScreenName", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "00000000-ffff-ffff-ffff-ffffffffffff", 0, "3890101f-9094-40e3-9abd-f69aa98b3e77", "joey@driscoll.com", true, false, null, "JOEY@DRISCOLL.COM", "JOEYALAKING", "AQAAAAEAACcQAAAAEPqkFG7WUWZMG3xUOpbpW05LN72xAMbI7iBnqFEduRM1jlgvU9XLDc0ZiwA4/4yGcA==", null, false, "Joey", "7f434309-a4d9-48e9-9ebb-8803db794577", false, "JoeyALaKing" });
+                values: new object[] { "00000000-ffff-ffff-ffff-ffffffffffff", 0, "6f203fa2-6cb7-4ecc-9304-f2f0f19abc45", "joey@driscoll.com", true, false, null, "JOEY@DRISCOLL.COM", "JOEYALAKING", "AQAAAAEAACcQAAAAEAENgJFD6A/KXpYQjWk9S6uRQFveShJVj9YkX243nSshwX/E+6x+aWaUSGXKoevHYw==", null, false, "Joey", "7f434309-a4d9-48e9-9ebb-8803db794577", false, "JoeyALaKing" });
 
             migrationBuilder.InsertData(
                 table: "Genre",
@@ -358,7 +358,7 @@ namespace DigiPax.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Key",
+                table: "MusicKey",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
@@ -414,7 +414,7 @@ namespace DigiPax.Migrations
                     { 17, "Brass & Woodwinds" },
                     { 7, "Leads" },
                     { 9, "Ryhthm" },
-                    { 10, "Keys" },
+                    { 10, "MusicKeys" },
                     { 11, "Risers" },
                     { 12, "Downers" },
                     { 13, "Transitions" },
@@ -425,7 +425,7 @@ namespace DigiPax.Migrations
 
             migrationBuilder.InsertData(
                 table: "Sample",
-                columns: new[] { "Id", "ApplicationUserId", "GenreId", "KeyId", "SampleName", "SamplePath", "SampleTypeId" },
+                columns: new[] { "Id", "ApplicationUserId", "GenreId", "MusicKeyId", "SampleName", "SamplePath", "SampleTypeId" },
                 values: new object[] { 1, "00000000-ffff-ffff-ffff-ffffffffffff", 1, 1, "Test Sample", "/AudioFiles", 1 });
 
             migrationBuilder.CreateIndex(
@@ -485,7 +485,8 @@ namespace DigiPax.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PackSample_PackId",
                 table: "PackSample",
-                column: "PackId");
+                column: "PackId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PackSample_SampleId",
@@ -503,9 +504,9 @@ namespace DigiPax.Migrations
                 column: "GenreId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sample_KeyId",
+                name: "IX_Sample_MusicKeyId",
                 table: "Sample",
-                column: "KeyId");
+                column: "MusicKeyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sample_SampleTypeId",
@@ -552,7 +553,7 @@ namespace DigiPax.Migrations
                 name: "Genre");
 
             migrationBuilder.DropTable(
-                name: "Key");
+                name: "MusicKey");
 
             migrationBuilder.DropTable(
                 name: "SampleType");

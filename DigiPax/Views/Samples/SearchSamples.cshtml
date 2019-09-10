@@ -1,20 +1,11 @@
 ﻿@model IEnumerable<DigiPax.Models.Sample>
 
 @{
-    ViewData["Title"] = "Sample Pool";
+    ViewData["Title"] = "SearchSamples";
 }
 
-<h1>Sample Pool</h1>
+<h2>Search Samples</h2>
 
-<p>
-    <a asp-action="Create">Add a Sample</a>
-</p>
-<form asp-controller="Samples" asp-action="SearchSamples">
-    <p>
-        Search Samples: <input type="text" name="SearchString">
-        <input type="submit" value="Search" />
-    </p>
-</form>
 <table class="table">
     <thead>
 
@@ -58,15 +49,10 @@
                     @Html.DisplayFor(modelItem => item.MusicKey.Name)
                 </td>
                 <td>
-                    <audio controls>
-                        <source src="~/AudioFiles/clinky tinky.mp3" type="audio/mpeg">
-
-                    </audio>
-                    <a asp-action="Create" asp-route-id="@item.Id">Favorite</a>
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
                 </td>
             </tr>
         }
-
     </tbody>
 </table>
-
