@@ -78,7 +78,7 @@ namespace DigiPax.Controllers
             {
                 samples = samples.Where(s => s.SampleName.Contains(searchString));
             }
-            int pageSize = 3;
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
             return View(samples.ToPagedList(pageNumber, pageSize));
 
@@ -153,6 +153,7 @@ namespace DigiPax.Controllers
                 }
                 var viewModel = new SampleCreateViewModel();
                 viewModel.MusicKeys = new SelectList(await _context.MusicKey.ToListAsync(), "Id", "Name");
+                //new SelectListItem { Text = "Keys", Value = "True", Selected = true });
                 viewModel.Genres = new SelectList(await _context.Genre.ToListAsync(), "Id", "Name");
                 viewModel.SampleTypes = new SelectList(await _context.SampleType.ToListAsync(), "Id", "Name");
                 return View(viewModel);
