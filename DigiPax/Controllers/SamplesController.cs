@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using DigiPax.Models.ViewModels;
+using X.PagedList;
 
 namespace DigiPax.Controllers
 {
@@ -27,62 +29,61 @@ namespace DigiPax.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Samples
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, string sortOrder, string currentFilter, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
+
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
             // Grabs samples from contexts, if search string exists samples are filtered by search
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
 
             var samples = from s in _context.Sample
                           .Include(s => s.Genre)
                           .Include(s => s.SampleType)
-                          .Include(s => s.Key)
+                          .Include(s => s.MusicKey)
                           .Include(s => s.ApplicationUser)
                           select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                samples = samples.Where(s => s.SampleName.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "sampleName_desc":
+                    samples = samples.OrderByDescending(s => s.SampleName);
+                    break;
+                case "genre_desc":
+                    samples = samples.OrderByDescending(s => s.Genre);
+                    break;
+                case "sampleType_desc":
+                    samples = samples.OrderByDescending(s => s.SampleType);
+                    break;
+                case "musicKey":
+                    samples = samples.OrderBy(s => s.MusicKey);
+                    break;
+            }
             var applicationDbContext = samples;
 
             if (!String.IsNullOrEmpty(searchString))
             {
                 samples = samples.Where(s => s.SampleName.Contains(searchString));
             }
-            return View(await applicationDbContext.ToListAsync());
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(samples.ToPagedList(pageNumber, pageSize));
 
         }
 
-        public async Task<IActionResult> Search(string searchString)
-        {
-            //Grabs samples from contexts, if search string exists samples are filtered by search
-
-           var samples = from s in _context.Sample
-                         .Include(s => s.Genre)
-                         .Include(s => s.SampleType)
-                         .Include(s => s.Key).Include(s => s.ApplicationUser)
-                         select s;
-            var applicationDbContext = samples;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                samples = samples.Where(s => s.SampleName.Contains(searchString));
-            }
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        //// GET: UserSamples
-        //public async Task<IActionResult> MySamples()
-        //{
-        //    var samples = await _context.Sample
-        //        .Where(s => s.ApplicationUserId == _userManager.GetUserId(User))
-        //        .Include(s => s.Key)
-        //        .Include(s => s.SampleType)
-        //        .Include(s => s.Genre)
-        //        .ToListAsync();
-
-        //    var mySamples = samples.Select(sample => new SampleCreateViewModel()
-        //    {
-        //        Sample = sample,
-        //    }).ToList();
-
-
-        //    return View();
-        //}
 
         // GET: Samples/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -93,9 +94,9 @@ namespace DigiPax.Controllers
             }
 
             var sample = await _context.Sample
-                .Include(s => s.Genre.Name)
+                .Include(s => s.Genre)
                 .Include(s => s.SampleType)
-                .Include(s => s.Key.Name)
+                .Include(s => s.MusicKey)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (sample == null)
             {
@@ -108,13 +109,16 @@ namespace DigiPax.Controllers
 
         [Authorize]
         // GET: Samples/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            ViewData["SampleTypeId"] = new SelectList(_context.SampleType, "SampleTypeId", "Label");
-            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Label");
-            ViewData["KeyId"] = new SelectList(_context.Key, "KeyId", "Label");
-            ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id");
-            return View();
+            var viewModel = new SampleCreateViewModel();
+            viewModel.MusicKeys = new SelectList(await _context.MusicKey.ToListAsync(), "Id", "Name");
+            viewModel.Genres = new SelectList(await _context.Genre.ToListAsync(), "Id", "Name");
+            viewModel.SampleTypes = new SelectList(await _context.SampleType.ToListAsync(), "Id", "Name");
+
+
+            return View(viewModel);
         }
 
         // POST: Products/Create
@@ -122,32 +126,46 @@ namespace DigiPax.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SampleName,SampleTypeId,GenreId,KeyId,SamplePath")] Sample sample, IFormFile file)
+        public async Task<IActionResult> Create([Bind("Id,SampleName,SampleTypeId,GenreId,MusicKeyId,SamplePath")] Sample sample, IFormFile file)
         {
-            var path = Path.Combine(
-                  Directory.GetCurrentDirectory(), "wwwroot",
-                  "AudioFiles", file.FileName);
-
-            using (var stream = new FileStream(path, FileMode.Create))
+            if (file != null)
             {
-                await file.CopyToAsync(stream);
-            }
 
-            ApplicationUser user = await GetCurrentUserAsync();
-            sample.ApplicationUserId = user.Id;
-            sample.SamplePath = "AudioFiles/" + file.FileName;
-            ModelState.Remove("ApplicationUserId");
-            if (ModelState.IsValid)
-            {
-                _context.Add(sample);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Details), new { id = sample.Id });
+
+                var path = Path.Combine(
+                      Directory.GetCurrentDirectory(), "wwwroot",
+                      "AudioFiles", file.FileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                ApplicationUser user = await GetCurrentUserAsync();
+                sample.ApplicationUserId = user.Id;
+                sample.SamplePath = "AudioFiles/" + file.FileName;
+                ModelState.Remove("sample.ApplicationUserId");
+                if (ModelState.IsValid)
+                {
+                    _context.Add(sample);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Details), new { id = sample.Id });
+                }
+                var viewModel = new SampleCreateViewModel();
+                viewModel.MusicKeys = new SelectList(await _context.MusicKey.ToListAsync(), "Id", "Name");
+                //new SelectListItem { Text = "Keys", Value = "True", Selected = true });
+                viewModel.Genres = new SelectList(await _context.Genre.ToListAsync(), "Id", "Name");
+                viewModel.SampleTypes = new SelectList(await _context.SampleType.ToListAsync(), "Id", "Name");
+                return View(viewModel);
             }
-            ViewData["SampleTypeId"] = new SelectList(_context.SampleType, "SampleTypeId", "Label", sample.SampleTypeId);
-            ViewData["GenreId"] = new SelectList(_context.Key, "KeyId", "Label", sample.KeyId);
-            ViewData["KeyId"] = new SelectList(_context.Genre, "GenreId", "Label", sample.GenreId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", sample.ApplicationUserId);
-            return View(sample);
+            else
+            {
+                var viewModel = new SampleCreateViewModel();
+                viewModel.MusicKeys = new SelectList(await _context.MusicKey.ToListAsync(), "Id", "Name");
+                viewModel.Genres = new SelectList(await _context.Genre.ToListAsync(), "Id", "Name");
+                viewModel.SampleTypes = new SelectList(await _context.SampleType.ToListAsync(), "Id", "Name");
+                return View(viewModel);
+            }
         }
 
         // GET: Samples/Edit/5
@@ -164,7 +182,7 @@ namespace DigiPax.Controllers
                 return NotFound();
             }
             ViewData["GenreId"] = new SelectList(_context.Genre, "Id", "Id", sample.GenreId);
-            ViewData["KeyId"] = new SelectList(_context.Key, "Id", "Id", sample.KeyId);
+            ViewData["KeyId"] = new SelectList(_context.MusicKey, "Id", "Id", sample.MusicKeyId);
             return View(sample);
         }
 
@@ -173,7 +191,7 @@ namespace DigiPax.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SampleName,SamplePath,ApplicationUserId,TypeId,GenreId,KeyId")] Sample sample)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,SampleName,SamplePath,ApplicationUserId,TypeId,GenreId,MusicKeyId")] Sample sample)
         {
             if (id != sample.Id)
             {
@@ -201,7 +219,7 @@ namespace DigiPax.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["GenreId"] = new SelectList(_context.Genre, "Id", "Id", sample.GenreId);
-            ViewData["KeyId"] = new SelectList(_context.Key, "Id", "Id", sample.KeyId);
+            ViewData["KeyId"] = new SelectList(_context.MusicKey, "Id", "Id", sample.MusicKeyId);
             return View(sample);
         }
 
@@ -215,7 +233,7 @@ namespace DigiPax.Controllers
 
             var sample = await _context.Sample
                 .Include(s => s.Genre)
-                .Include(s => s.Key)
+                .Include(s => s.MusicKey)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (sample == null)
             {
@@ -240,5 +258,43 @@ namespace DigiPax.Controllers
         {
             return _context.Sample.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> SearchSamples(string searchString)
+        {
+            //Grabs samples from contexts, if search string exists samples are filtered by search
+
+            var samples = from s in _context.Sample
+                          .Include(s => s.Genre)
+                          .Include(s => s.SampleType)
+                          .Include(s => s.MusicKey)
+                          .Include(s => s.ApplicationUser)
+                          select s;
+            var applicationDbContext = samples;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                samples = samples.Where(s => s.SampleName.Contains(searchString));
+            }
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        //// GET: UserSamples
+        //public async Task<IActionResult> MySamples()
+        //{
+        //    var samples = await _context.Sample
+        //        .Where(s => s.ApplicationUserId == _userManager.GetUserId(User))
+        //        .Include(s => s.Key)
+        //        .Include(s => s.SampleType)
+        //        .Include(s => s.Genre)
+        //        .ToListAsync();
+
+        //    var mySamples = samples.Select(sample => new SampleCreateViewModel()
+        //    {
+        //        Sample = sample,
+        //    }).ToList();
+
+
+        //    return View();
+        //}
     }
 }

@@ -15,7 +15,6 @@ namespace DigiPax.Models
         [Required]
         [Display(Name = "Sample Name")]
         public string SampleName { get; set; }
-
         public string SamplePath { get; set; }
 
         [Required]
@@ -23,21 +22,18 @@ namespace DigiPax.Models
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
 
-        [Required]
         [Display(Name = "Type")]
         public int SampleTypeId { get; set; }
         [Display(Name = "Type")]
         public SampleType SampleType { get; set; }
 
-        [Required]
         [Display(Name = "Genre")]
         public int GenreId { get; set; }
         public Genre Genre { get; set; }
 
-        [Required]
         [Display(Name = "Key")]
-        public int KeyId { get; set; }
-        public Key Key { get; set; }
+        public int MusicKeyId { get; set; }
+        public MusicKey MusicKey { get; set; }
 
 
 

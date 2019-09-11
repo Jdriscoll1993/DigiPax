@@ -1,5 +1,6 @@
-﻿@model IEnumerable<DigiPax.Models.Sample>
-
+﻿@model X.PagedList.IPagedList<DigiPax.Models.Sample>
+@using X.PagedList.Mvc.Core;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
     ViewData["Title"] = "Sample Pool";
 }
@@ -7,27 +8,33 @@
 <h1>Sample Pool</h1>
 
 <p>
-    <a asp-action="Create">Add a Sample</a>
+    <a asp-action="Create">UPLOAD</a>
 </p>
-
+@using (Html.BeginForm("Index", "Sample", FormMethod.Get))
+{
+    <p>
+        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
 <table class="table">
     <thead>
 
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.SampleName)
+                @Html.ActionLink("Sample Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ApplicationUserId)
+                @Html.ActionLink("Author", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SampleType)
+                @Html.ActionLink("Type", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Genre)
+                @Html.ActionLink("Genre", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Key)
+                @Html.ActionLink("Key", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
 
         </tr>
@@ -36,31 +43,39 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SampleName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SampleType.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Genre.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Key.Name)
-                </td>
-                <td>
-                    <audio controls>
-                        <source src="~/AudioFiles/clinky tinky.mp3" type="audio/mpeg">
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SampleName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SampleType.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Genre.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MusicKey.Name)
+            </td>
+            <td>
+                <audio controls>
+                    <source src="~/@item.SamplePath" type="audio/mpeg">
 
-                    </audio>
-                    <a asp-action="Create" asp-route-id="@item.Id">Favorite</a>
-                </td>
-            </tr>
+                </audio>
+                <a asp-action="Create" asp-route-id="@item.Id">Favorite</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+      
+            </td>
+        </tr>
         }
+
     </tbody>
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 

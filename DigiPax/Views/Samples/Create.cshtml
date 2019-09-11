@@ -1,0 +1,54 @@
+﻿@model DigiPax.Models.ViewModels.SampleCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Pack</h4>
+<hr />
+<div>
+    <div>
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>
+                <label asp-for="Sample.SampleName" class="control-label"></label>
+                <input asp-for="Sample.SampleName" class="form-control" />
+                <span asp-validation-for="Sample.SampleName" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Sample.Genre" class="control-label"></label>
+                <select asp-for="Sample.GenreId" asp-items="@Model.Genres" class="form-control"></select>
+                <span asp-validation-for="Sample.GenreId" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Sample.MusicKeyId" class="control-label"></label>
+                <select asp-for="Sample.MusicKeyId" asp-items="@Model.MusicKeys" class="form-control"></select>
+                <span asp-validation-for="Sample.MusicKeyId" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Sample.SampleTypeId" class="control-label"></label>
+                <select asp-for="Sample.SampleTypeId" asp-items="@Model.SampleTypes" class="form-control"></select>
+                <span asp-validation-for="Sample.SampleTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <p>Upload one or more files using this form:</p>
+                <input type="file" name="file" />
+            </div>
+            <div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
