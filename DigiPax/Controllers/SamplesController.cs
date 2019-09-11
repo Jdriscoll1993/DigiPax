@@ -78,7 +78,7 @@ namespace DigiPax.Controllers
             {
                 samples = samples.Where(s => s.SampleName.Contains(searchString));
             }
-            int pageSize = 10;
+            int pageSize = 3;
             int pageNumber = (page ?? 1);
             return View(samples.ToPagedList(pageNumber, pageSize));
 
@@ -140,15 +140,18 @@ namespace DigiPax.Controllers
             ApplicationUser user = await GetCurrentUserAsync();
             sample.ApplicationUserId = user.Id;
             sample.SamplePath = "AudioFiles/" + file.FileName;
-            ModelState.Remove("ApplicationUserId");
+            ModelState.Remove("sample.ApplicationUserId");
             if (ModelState.IsValid)
             {
                 _context.Add(sample);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = sample.Id });
             }
-
-            return View(sample);
+            var viewModel = new SampleCreateViewModel();
+            viewModel.MusicKeys = new SelectList(await _context.MusicKey.ToListAsync(), "Id", "Name");
+            viewModel.Genres = new SelectList(await _context.Genre.ToListAsync(), "Id", "Name");
+            viewModel.SampleTypes = new SelectList(await _context.SampleType.ToListAsync(), "Id", "Name");
+            return View(viewModel);
         }
 
         // GET: Samples/Edit/5

@@ -8,7 +8,7 @@
 <h1>Sample Pool</h1>
 
 <p>
-    <a asp-action="Create">Add a Sample</a>
+    <a asp-action="Create">UPLOAD</a>
 </p>
 @using (Html.BeginForm("Index", "Sample", FormMethod.Get))
 {
@@ -61,7 +61,7 @@
                 </td>
                 <td>
                     <audio controls>
-                        <source src="~/AudioFiles/clinky tinky.mp3" type="audio/mpeg">
+                        <source src="~/@item.SamplePath" type="audio/mpeg">
 
                     </audio>
                     <a asp-action="Create" asp-route-id="@item.Id">Favorite</a>
