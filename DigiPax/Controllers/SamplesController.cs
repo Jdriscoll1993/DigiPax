@@ -126,7 +126,7 @@ namespace DigiPax.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SampleName,SampleTypeId,GenreId,KeyId,SamplePath")] Sample sample, SampleCreateViewModel svm, IFormFile file)
+        public async Task<IActionResult> Create([Bind("Id,SampleName,SampleTypeId,GenreId,MusicKeyId,SamplePath")] Sample sample, IFormFile file)
         {
             var path = Path.Combine(
                   Directory.GetCurrentDirectory(), "wwwroot",
@@ -143,12 +143,12 @@ namespace DigiPax.Controllers
             ModelState.Remove("ApplicationUserId");
             if (ModelState.IsValid)
             {
-                _context.Add(svm);
+                _context.Add(sample);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = sample.Id });
             }
 
-            return View(svm);
+            return View(sample);
         }
 
         // GET: Samples/Edit/5
@@ -174,7 +174,7 @@ namespace DigiPax.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SampleName,SamplePath,ApplicationUserId,TypeId,GenreId,KeyId")] Sample sample)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,SampleName,SamplePath,ApplicationUserId,TypeId,GenreId,MusicKeyId")] Sample sample)
         {
             if (id != sample.Id)
             {
