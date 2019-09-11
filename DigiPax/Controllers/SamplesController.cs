@@ -128,30 +128,43 @@ namespace DigiPax.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,SampleName,SampleTypeId,GenreId,MusicKeyId,SamplePath")] Sample sample, IFormFile file)
         {
-            var path = Path.Combine(
-                  Directory.GetCurrentDirectory(), "wwwroot",
-                  "AudioFiles", file.FileName);
-
-            using (var stream = new FileStream(path, FileMode.Create))
+            if (file != null)
             {
-                await file.CopyToAsync(stream);
-            }
 
-            ApplicationUser user = await GetCurrentUserAsync();
-            sample.ApplicationUserId = user.Id;
-            sample.SamplePath = "AudioFiles/" + file.FileName;
-            ModelState.Remove("sample.ApplicationUserId");
-            if (ModelState.IsValid)
-            {
-                _context.Add(sample);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Details), new { id = sample.Id });
+
+                var path = Path.Combine(
+                      Directory.GetCurrentDirectory(), "wwwroot",
+                      "AudioFiles", file.FileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                ApplicationUser user = await GetCurrentUserAsync();
+                sample.ApplicationUserId = user.Id;
+                sample.SamplePath = "AudioFiles/" + file.FileName;
+                ModelState.Remove("sample.ApplicationUserId");
+                if (ModelState.IsValid)
+                {
+                    _context.Add(sample);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Details), new { id = sample.Id });
+                }
+                var viewModel = new SampleCreateViewModel();
+                viewModel.MusicKeys = new SelectList(await _context.MusicKey.ToListAsync(), "Id", "Name");
+                viewModel.Genres = new SelectList(await _context.Genre.ToListAsync(), "Id", "Name");
+                viewModel.SampleTypes = new SelectList(await _context.SampleType.ToListAsync(), "Id", "Name");
+                return View(viewModel);
             }
-            var viewModel = new SampleCreateViewModel();
-            viewModel.MusicKeys = new SelectList(await _context.MusicKey.ToListAsync(), "Id", "Name");
-            viewModel.Genres = new SelectList(await _context.Genre.ToListAsync(), "Id", "Name");
-            viewModel.SampleTypes = new SelectList(await _context.SampleType.ToListAsync(), "Id", "Name");
-            return View(viewModel);
+            else
+            {
+                var viewModel = new SampleCreateViewModel();
+                viewModel.MusicKeys = new SelectList(await _context.MusicKey.ToListAsync(), "Id", "Name");
+                viewModel.Genres = new SelectList(await _context.Genre.ToListAsync(), "Id", "Name");
+                viewModel.SampleTypes = new SelectList(await _context.SampleType.ToListAsync(), "Id", "Name");
+                return View(viewModel);
+            }
         }
 
         // GET: Samples/Edit/5

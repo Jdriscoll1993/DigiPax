@@ -480,54 +480,90 @@ namespace DigiPax.Data
                     Id = 7,
                     Name = "B"
                 },
-                // Flats
+                // Minor Keys
                 new MusicKey()
-                {
+                { 
                     Id = 8,
-                    Name = "Db"
+                    Name = "Cm"
                 },
                 new MusicKey()
                 {
                     Id = 9,
-                    Name = "Eb"
+                    Name = "Dm"
                 },
                 new MusicKey()
                 {
                     Id = 10,
-                    Name = "Gb"
+                    Name = "Em"
                 },
                 new MusicKey()
                 {
                     Id = 11,
-                    Name = "Ab"
+                    Name = "Fm"
                 },
                 new MusicKey()
                 {
                     Id = 12,
+                    Name = "Gm"
+                },
+                new MusicKey()
+                {
+                    Id = 13,
+                    Name = "Am"
+                },
+                new MusicKey()
+                {
+                    Id = 14,
+                    Name = "Bm"
+                },
+                // Flats
+                new MusicKey()
+                {
+                    Id = 15,
+                    Name = "Db"
+                },
+                new MusicKey()
+                {
+                    Id = 16,
+                    Name = "Eb"
+                },
+                new MusicKey()
+                {
+                    Id = 17,
+                    Name = "Gb"
+                },
+                new MusicKey()
+                {
+                    Id = 18,
+                    Name = "Ab"
+                },
+                new MusicKey()
+                {
+                    Id = 19,
                     Name = "Bb"
                 },
                 // Sharps
                 new MusicKey()
                 {
-                    Id = 13,
+                    Id = 20,
                     Name = "C#"
                 },
                 new MusicKey()
                 {
-                    Id = 14,
+                    Id = 21,
                     Name = "D#"
                 },
                 new MusicKey()
                 {
-                    Id = 15,
+                    Id = 22,
                     Name = "F#"
                 }, new MusicKey()
                 {
-                    Id = 16,
+                    Id = 23,
                     Name = "G#"
                 }, new MusicKey()
                 {
-                    Id = 17,
+                    Id = 24,
                     Name = "A#"
                 });
         }

@@ -15,7 +15,6 @@ namespace DigiPax.Models
         [Required]
         [Display(Name = "Sample Name")]
         public string SampleName { get; set; }
-
         public string SamplePath { get; set; }
 
         [Required]
