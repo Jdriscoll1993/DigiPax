@@ -1,35 +1,81 @@
 ﻿@model IEnumerable<DigiPax.Models.Favorite>
+@using Microsoft.AspNetCore.Identity
 
-@{
-    ViewData["Title"] = "Index";
-}
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
 
-<h1>Index</h1>
+<h3>Collections</h3>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<h3>My Favorites</h3>
+
+
+<table class="table">
+    <thead>
+
+    </thead>
+    <tbody>
+
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Sample.SampleName)
             </th>
-            <th></th>
+
         </tr>
+        @foreach (var item in Model)
+        {
+            @if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sample.SampleName)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<h3>My Samples</h3>
+
+
+<table class="table">
+    <thead>
+
     </thead>
     <tbody>
-@foreach (var item in Model) {
+
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sample.SampleName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.Sample.SampleName)
+            </th>
+
         </tr>
-}
+        @foreach (var item in Model)
+        {
+            @if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sample.SampleName)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
     </tbody>
 </table>
