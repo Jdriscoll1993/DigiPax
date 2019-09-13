@@ -8,27 +8,31 @@ using Microsoft.EntityFrameworkCore;
 using DigiPax.Data;
 using DigiPax.Models;
 using DigiPax.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace DigiPax.Controllers
 {
     public class FavoritesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public FavoritesController(ApplicationDbContext context)
+        public FavoritesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Favorites
         public async Task<IActionResult> Index()
 
         {
             var viewModel = new FavoriteListViewModel();
-
-            var applicationDbContext = _context.Favorite.Include(f => f.Sample).Include(f => f.ApplicationUser);
-            return View(await applicationDbContext.ToListAsync());
-
+            var user = await GetCurrentUserAsync();
+            viewModel.Favorites = await _context.Favorite.Include(f => f.Sample).ToListAsync();
+            viewModel.Samples = await _context.Sample.Where(s => s.ApplicationUserId == user.Id).ToListAsync();
+            return View(viewModel);
         }
 
         // GET: Favorites/Details/5
