@@ -7,7 +7,8 @@ namespace DigiPax.Models.ViewModels
 {
     public class FavoriteListViewModel
     {
-        public IEnumerable<Sample> Favorites { get; set; }
+        public IEnumerable<Favorite> Favorites { get; set; }
         public IEnumerable<Sample> Samples { get; set; }
+        public Sample Sample { get; set; }
     }
 }

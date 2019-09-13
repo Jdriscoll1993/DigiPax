@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DigiPax.Models.Favorite>
+﻿@model DigiPax.Models.ViewModels.FavoriteListViewModel
 @using Microsoft.AspNetCore.Identity
 
 @inject UserManager<ApplicationUser> UserManager
@@ -25,11 +25,11 @@
 
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Sample.SampleName)
+                Sample Name
             </th>
 
         </tr>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Favorites)
         {
             @if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
             {
@@ -62,20 +62,18 @@
             </th>
 
         </tr>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Samples)
         {
-            @if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Sample.SampleName)
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
-            }
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SampleName)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+
         }
     </tbody>
 </table>

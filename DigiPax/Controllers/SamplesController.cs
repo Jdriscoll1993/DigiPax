@@ -33,8 +33,11 @@ namespace DigiPax.Controllers
         {
             ViewBag.CurrentSort = sortOrder;
 
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.SampleNameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.GenreSortParm = sortOrder == "Genre" ? "genre_desc" : "Genre";
+            ViewBag.KeySortParm = sortOrder == "Key" ? "key_desc" : "Key";
+            ViewBag.TypeSortParm = sortOrder == "Type" ? "type_desc" : "Type";
+            ViewBag.AuthorSortParm = sortOrder == "Author" ? "author_desc" : "Author";
             // Grabs samples from contexts, if search string exists samples are filtered by search
             if (searchString != null)
             {
@@ -59,18 +62,36 @@ namespace DigiPax.Controllers
             }
             switch (sortOrder)
             {
-                case "sampleName_desc":
+                case "name_desc":
                     samples = samples.OrderByDescending(s => s.SampleName);
                     break;
+                case "Genre":
+                    samples = samples.OrderBy(s => s.Genre.Name);
+                    break;
                 case "genre_desc":
-                    samples = samples.OrderByDescending(s => s.Genre);
+                    samples = samples.OrderByDescending(s => s.Genre.Name);
                     break;
-                case "sampleType_desc":
-                    samples = samples.OrderByDescending(s => s.SampleType);
+                case "Type":
+                    samples = samples.OrderBy(s => s.SampleType.Name);
                     break;
-                case "musicKey":
-                    samples = samples.OrderBy(s => s.MusicKey);
+                case "type_desc":
+                    samples = samples.OrderByDescending(s => s.SampleType.Name);
                     break;
+                case "Key":
+                    samples = samples.OrderBy(s => s.MusicKey.Name);
+                    break;
+                case "key_desc":
+                    samples = samples.OrderByDescending(s => s.MusicKey.Name);
+                    break;
+                case "Author":
+                    samples = samples.OrderBy(s => s.ApplicationUser.UserName);
+                    break;
+                case "author_desc":
+                    samples = samples.OrderByDescending(s => s.ApplicationUser.UserName);
+                    break;
+                default:
+                    samples = samples.OrderBy(s => s.SampleName);
+                        break;
             }
             var applicationDbContext = samples;
 
@@ -78,7 +99,7 @@ namespace DigiPax.Controllers
             {
                 samples = samples.Where(s => s.SampleName.Contains(searchString));
             }
-            int pageSize = 10;
+            int pageSize = 5;
             int pageNumber = (page ?? 1);
             return View(samples.ToPagedList(pageNumber, pageSize));
 
@@ -186,8 +207,8 @@ namespace DigiPax.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-            // GET: Samples/Edit/5
-            public async Task<IActionResult> Edit(int? id)
+        // GET: Samples/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
