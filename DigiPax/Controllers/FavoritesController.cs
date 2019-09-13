@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DigiPax.Data;
 using DigiPax.Models;
+using DigiPax.Models.ViewModels;
 
 namespace DigiPax.Controllers
 {
@@ -21,9 +22,13 @@ namespace DigiPax.Controllers
 
         // GET: Favorites
         public async Task<IActionResult> Index()
+
         {
-            var applicationDbContext = _context.Favorite.Include(f => f.Sample);
+            var viewModel = new FavoriteListViewModel();
+
+            var applicationDbContext = _context.Favorite.Include(f => f.Sample).Include(f => f.ApplicationUser);
             return View(await applicationDbContext.ToListAsync());
+
         }
 
         // GET: Favorites/Details/5
@@ -36,13 +41,18 @@ namespace DigiPax.Controllers
 
             var favorite = await _context.Favorite
                 .Include(f => f.Sample)
+                .Include(f => f.Sample.MusicKey)
+                .Include(f => f.Sample.SampleType)
+                .Include(f => f.Sample.Genre)
+
+
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (favorite == null)
             {
                 return NotFound();
             }
 
-            return View(favorite);
+            return View(favorite.Sample);
         }
 
         // GET: Favorites/Create

@@ -183,7 +183,7 @@ namespace DigiPax.Controllers
             await _context.Favorite.AddAsync(favorite);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return RedirectToAction(nameof(Index));
         }
 
             // GET: Samples/Edit/5
