@@ -10,22 +10,23 @@ using DigiPax.Models;
 
 namespace DigiPax.Controllers
 {
-    public class SampleTypesController : Controller
+    public class FavoritesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public SampleTypesController(ApplicationDbContext context)
+        public FavoritesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: SampleTypes
+        // GET: Favorites
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SampleType.ToListAsync());
+            var applicationDbContext = _context.Favorite.Include(f => f.Sample);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: SampleTypes/Details/5
+        // GET: Favorites/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +34,42 @@ namespace DigiPax.Controllers
                 return NotFound();
             }
 
-            var sampleType = await _context.SampleType
+            var favorite = await _context.Favorite
+                .Include(f => f.Sample)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (sampleType == null)
+            if (favorite == null)
             {
                 return NotFound();
             }
 
-            return View(sampleType);
+            return View(favorite);
         }
 
-        // GET: SampleTypes/Create
+        // GET: Favorites/Create
         public IActionResult Create()
         {
+            ViewData["SampleId"] = new SelectList(_context.Sample, "Id", "ApplicationUserId");
             return View();
         }
 
-        // POST: SampleTypes/Create
+        // POST: Favorites/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] SampleType sampleType)
+        public async Task<IActionResult> Create([Bind("Id,UserId,SampleId")] Favorite favorite)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(sampleType);
+                _context.Add(favorite);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(sampleType);
+            ViewData["SampleId"] = new SelectList(_context.Sample, "Id", "ApplicationUserId", favorite.SampleId);
+            return View(favorite);
         }
 
-        // GET: SampleTypes/Edit/5
+        // GET: Favorites/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +77,23 @@ namespace DigiPax.Controllers
                 return NotFound();
             }
 
-            var sampleType = await _context.SampleType.FindAsync(id);
-            if (sampleType == null)
+            var favorite = await _context.Favorite.FindAsync(id);
+            if (favorite == null)
             {
                 return NotFound();
             }
-            return View(sampleType);
+            ViewData["SampleId"] = new SelectList(_context.Sample, "Id", "ApplicationUserId", favorite.SampleId);
+            return View(favorite);
         }
 
-        // POST: SampleTypes/Edit/5
+        // POST: Favorites/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] SampleType sampleType)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,SampleId")] Favorite favorite)
         {
-            if (id != sampleType.Id)
+            if (id != favorite.Id)
             {
                 return NotFound();
             }
@@ -97,12 +102,12 @@ namespace DigiPax.Controllers
             {
                 try
                 {
-                    _context.Update(sampleType);
+                    _context.Update(favorite);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SampleTypeExists(sampleType.Id))
+                    if (!FavoriteExists(favorite.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +118,11 @@ namespace DigiPax.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(sampleType);
+            ViewData["SampleId"] = new SelectList(_context.Sample, "Id", "ApplicationUserId", favorite.SampleId);
+            return View(favorite);
         }
 
-        // GET: SampleTypes/Delete/5
+        // GET: Favorites/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +130,31 @@ namespace DigiPax.Controllers
                 return NotFound();
             }
 
-            var sampleType = await _context.SampleType
+            var favorite = await _context.Favorite
+                .Include(f => f.Sample)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (sampleType == null)
+            if (favorite == null)
             {
                 return NotFound();
             }
 
-            return View(sampleType);
+            return View(favorite);
         }
 
-        // POST: SampleTypes/Delete/5
+        // POST: Favorites/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var sampleType = await _context.SampleType.FindAsync(id);
-            _context.SampleType.Remove(sampleType);
+            var favorite = await _context.Favorite.FindAsync(id);
+            _context.Favorite.Remove(favorite);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SampleTypeExists(int id)
+        private bool FavoriteExists(int id)
         {
-            return _context.SampleType.Any(e => e.Id == id);
+            return _context.Favorite.Any(e => e.Id == id);
         }
     }
 }

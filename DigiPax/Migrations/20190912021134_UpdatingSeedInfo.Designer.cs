@@ -4,14 +4,16 @@ using DigiPax.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DigiPax.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190912021134_UpdatingSeedInfo")]
+    partial class UpdatingSeedInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,13 +79,13 @@ namespace DigiPax.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "516df162-039f-41f6-b067-42c35300f13b",
+                            ConcurrencyStamp = "17cac97d-882a-4e38-82eb-6da8fb008831",
                             Email = "joey@driscoll.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "JOEY@DRISCOLL.COM",
                             NormalizedUserName = "JOEYALAKING",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMNt1+evqG6LRu7Fkf58Suz05f41252yxa6jgs14lA6n+gLLFhsXey2ry9EJ0HWygQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJ/FZvWQlAZxV35R9B19y0AqSAIktrXSQAD3CZlpG4JpOUrlZW2J5erIdzaoIQS7Uw==",
                             PhoneNumberConfirmed = false,
                             ScreenName = "Joey",
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
@@ -440,6 +442,11 @@ namespace DigiPax.Migrations
                         {
                             Id = 24,
                             Name = "A#"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Name = "Am"
                         });
                 });
 

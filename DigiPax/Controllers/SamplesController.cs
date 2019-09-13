@@ -168,8 +168,26 @@ namespace DigiPax.Controllers
             }
         }
 
-        // GET: Samples/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+
+        //[HttpGet("{applicationUserId}/{sampleId}")]
+        public async Task<IActionResult> AddToFavorite(int sampleId)
+        {
+            // create a new record of favorite
+            var favorite = new Favorite();
+            // grab the current user and assign it to a variable
+            ApplicationUser user = await GetCurrentUserAsync();
+            // initiate the value of properties
+            favorite.SampleId = sampleId;
+            favorite.ApplicationUser = user;
+            // saving the record to the database asynchronosly 
+            await _context.Favorite.AddAsync(favorite);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+            // GET: Samples/Edit/5
+            public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
