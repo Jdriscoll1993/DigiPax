@@ -482,7 +482,7 @@ namespace DigiPax.Data
                 },
                 // Minor Keys
                 new MusicKey()
-                { 
+                {
                     Id = 8,
                     Name = "Cm"
                 },

@@ -22,7 +22,7 @@
         <input type="submit" value="Search" />
     </p>
 }
-<table class="table">
+<table class="table-striped table-hover table-secondary">
     <thead>
 
         <tr>
@@ -69,14 +69,14 @@
                         <source src="~/@item.SamplePath" type="audio/mpeg">
 
                     </audio>
-                    <a asp-action="Create" asp-route-id="@item.Id">Favorite</a> |
+                    <a asp-action="AddToFavorite" asp-route-applicationUserId="@item.ApplicationUserId" asp-route-sampleId="@item.Id">Favorite</a> |
                     @{ if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
                         {
                             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                         }
                         else
                         {
-                            
+
                         }
                     }
 
