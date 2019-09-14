@@ -10,11 +10,11 @@
     ViewData["Title"] = "Sample Pool";
 }
 
+<p>
+    <a asp-action="Create"><i class="fab fa-4x text-right d-inline-block fa-creative-commons-sampling-plus"></i></a>
+</p>
 <h1>Sample Pool</h1>
 
-<p>
-    <a asp-action="Create">UPLOAD</a>
-</p>
 @using (Html.BeginForm("Index", "Sample", FormMethod.Get))
 {
     <p>
@@ -22,10 +22,10 @@
         <input type="submit" value="Search" />
     </p>
 }
-<table class="table-striped table-hover table-secondary">
+<table class="table-striped table-hover table-responsive-lg table-secondary">
     <thead>
 
-        <tr>
+        <tr class="display-6">
             <th>
                 @Html.ActionLink("Sample Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
@@ -42,7 +42,7 @@
                 @Html.ActionLink("Key", "Index", new { sortOrder = ViewBag.KeySortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
 
-        </tr>
+        </trclass="display-3">
 
     </thead>
     <tbody>
@@ -69,10 +69,10 @@
                         <source src="~/@item.SamplePath" type="audio/mpeg">
 
                     </audio>
-                    <a asp-action="AddToFavorite" asp-route-applicationUserId="@item.ApplicationUserId" asp-route-sampleId="@item.Id">Favorite</a> |
+                    <a asp-action="AddToFavorite" asp-route-applicationUserId="@item.ApplicationUserId" asp-route-sampleId="@item.Id"><i class="far fa-1x fa-star"></i></a>
                     @{ if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
                         {
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-1x fa-trash-alt"></i></a>
                         }
                     }
 
