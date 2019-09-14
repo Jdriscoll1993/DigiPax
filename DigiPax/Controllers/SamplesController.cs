@@ -33,7 +33,7 @@ namespace DigiPax.Controllers
         {
             ViewBag.CurrentSort = sortOrder;
 
-            ViewBag.SampleNameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.SampleNameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "Name";
             ViewBag.GenreSortParm = sortOrder == "Genre" ? "genre_desc" : "Genre";
             ViewBag.KeySortParm = sortOrder == "Key" ? "key_desc" : "Key";
             ViewBag.TypeSortParm = sortOrder == "Type" ? "type_desc" : "Type";
@@ -64,6 +64,9 @@ namespace DigiPax.Controllers
             {
                 case "name_desc":
                     samples = samples.OrderByDescending(s => s.SampleName);
+                    break;
+                case "Name":
+                    samples = samples.OrderBy(s => s.SampleName);
                     break;
                 case "Genre":
                     samples = samples.OrderBy(s => s.Genre.Name);
