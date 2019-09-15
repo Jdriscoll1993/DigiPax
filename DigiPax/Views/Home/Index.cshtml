@@ -1,31 +1,47 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@using Microsoft.AspNetCore.Identity
 
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
 @*<div class="text-center">
         <h1 class="display-2">DigiPax</h1>
     </div>*@
-<br />
-<br />
-<br />
-
-<div class="pt-lg-5 d-flex justify-content-center justify-content-between ">
 
 
+<div class="pt-lg-5 d-flex justify-content-center justify-content-between">
+    @if (SignInManager.IsSignedIn(User))
+    {
     <div class=" pt-lg-5 fa-2x d-inline-block">
         <br />
-        <a asp-action="Index" asp-controller="Favorites"><i class="fas fa-7x fa-layer-group text-white-50 btn-outline-secondary border-white" aria-hidden="true"></i></a>
+        <h1 class="d-flex justify-content-center text-white-50">Collection</h1>
+        <br />
+        <a asp-action="Index" asp-controller="Favorites"><i class="fas fa-7x fa-layer-group text-white-50 border-white btn-outline-dark" aria-hidden="true"></i></a>
     </div>
 
-    <div class="pt-lg-5 fa-2x d-inline-block">
-        <br />
-        <a asp-action="Index" asp-controller="Samples"><i class="fab fa-7x fa-creative-commons-sampling text-warning btn-outline-secondary border-white" aria-hidden="true"></i></a>
-    </div>
+        <div class="pt-lg-5 fa-2x d-inline-block">
+            <br />
+            <h1 class="d-flex justify-content-center text-warning">Samples</h1>
+            <br />
+            <a asp-action="Index" asp-controller="Samples"><i class="fab rounded-circle fa-7x fa-creative-commons-sampling text-warning btn-outline-secondary border-white" aria-hidden="true"></i></a>
+        </div>
 
-    <div class="pt-5 fa-2x d-inline-block">
-        <br />
-        <a asp-action="Index" asp-controller="Packs"><i class="fas fa-7x fas fa-archive text-primary btn-outline-secondary border-white" aria-hidden="true"></i></a>
-    </div>
+        <div class="pt-5 fa-2x d-inline-block">
+            <br />
+            <h1 class="d-flex justify-content-center text-primary">Packs</h1>
+            <br />
+            <a asp-action="Index" asp-controller="Packs"><i class="fas fa-7x fas fa-archive text-primary btn-outline-secondary border-white" aria-hidden="true"></i></a>
+        </div>
+    }
+    else
+    {
+
+        <h3 class="text-center display-4"></h3>
+        <h3 class="text-center display-4 mt-5">Welcome To <strong class="text-primary">DigiPax</strong></h3>
+        <h3 class="text-center display-4"></h3>
+    }
+
 </div>
 
 
