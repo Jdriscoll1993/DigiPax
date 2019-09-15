@@ -4,37 +4,19 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
 
-<h3>Collections</h3>
+<h1 class="text-center"><strong>Collections</strong></h1>
 
-
-<table class="table">
+<hr /><h3>My Favorites</h3>
+<table>
     <thead>
     </thead>
     <tbody>
-    </tbody>
-</table>
-
-<h3>My Favorites</h3>
-
-
-<table class="table">
-    <thead>
-
-    </thead>
-    <tbody>
-
-        <tr>
-            <th>
-                Sample Name
-            </th>
-
-        </tr>
         @foreach (var item in Model.Favorites)
         {
             @if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
             {
                 <tr>
-                    <td>
+                    <td class="pr-3">
                         @Html.DisplayFor(modelItem => item.Sample.SampleName)
                     </td>
                     <td>
@@ -47,33 +29,25 @@
     </tbody>
 </table>
 
-<h3>My Samples</h3>
+<hr /><h3>My Samples</h3>
 
-
-<table class="table">
+<table>
     <thead>
 
     </thead>
     <tbody>
-
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Sample.SampleName)
-            </th>
-
-        </tr>
         @foreach (var item in Model.Samples)
         {
             <tr>
-                <td>
+                <td class="pr-3">
                     @Html.DisplayFor(modelItem => item.SampleName)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle"></i></a>
                 </td>
             </tr>
 
         }
     </tbody>
 </table>
+<hr />

@@ -2,29 +2,31 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">DigiPax</h1>
+@*<div class="text-center">
+        <h1 class="display-2">DigiPax</h1>
+    </div>*@
+<br />
+<br />
+<br />
+
+<div class="pt-lg-5 d-flex justify-content-center justify-content-between ">
+
+
+    <div class=" pt-lg-5 fa-2x d-inline-block">
+        <br />
+        <a asp-action="Index" asp-controller="Favorites"><i class="fas fa-7x fa-layer-group text-white-50 btn-outline-secondary border-white" aria-hidden="true"></i></a>
+    </div>
+
+    <div class="pt-lg-5 fa-2x d-inline-block">
+        <br />
+        <a asp-action="Index" asp-controller="Samples"><i class="fab fa-7x fa-creative-commons-sampling text-warning btn-outline-secondary border-white" aria-hidden="true"></i></a>
+    </div>
+
+    <div class="pt-5 fa-2x d-inline-block">
+        <br />
+        <a asp-action="Index" asp-controller="Packs"><i class="fas fa-7x fas fa-archive text-primary btn-outline-secondary border-white" aria-hidden="true"></i></a>
+    </div>
 </div>
-<grid>
-    <br />
-    <br />
-    <br />
-    <div class="d-inline-block text-center">
-        <i class="fas fa-7x fa-layer-group d-inline-block text-center" aria-hidden="true"></i>
-    </div>
-    <br />
-    <br />
-    <br />
-    <div class="d-inline-block text-center">
-        <i class="fab fa-7x fa-creative-commons-sampling d-inline-block text-center" aria-hidden="true"></i>
-    </div>
-    <br />
-    <br />
-    <br />
-    <div class="d-inline-block text-center">
-        <i class="fas fa-7x fas fa-archive d-inline-block text-center" aria-hidden="true"></i>
-    </div>
-</grid>
 
 
 
