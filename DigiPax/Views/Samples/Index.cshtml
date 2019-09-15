@@ -9,71 +9,71 @@
 @{
     ViewData["Title"] = "Sample Pool";
 }
-
-<p>
-    <a asp-action="Create"><i class="fab fa-4x text-right d-inline-block fa-creative-commons-sampling-plus"></i></a>
-</p>
-<h1>Sample Pool</h1>
-
-@using (Html.BeginForm("Index", "Sample", FormMethod.Get))
-{
+<div class="ml-auto">
     <p>
-        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
+        <a asp-action="Create"><i class="fab fa-4x text-right text-warning d-inline-block float-right fa-creative-commons-sampling-plus"></i></a>
     </p>
-}
-<table class="table-striped table-hover table-responsive-lg table-secondary">
-    <thead>
+    <h1 class="text-center">Sample Pool</h1>
 
-        <tr class="display-6">
-            <th>
-                @Html.ActionLink("Sample Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th>
-                @Html.ActionLink("Author", "Index", new { sortOrder = ViewBag.AuthorSortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th>
-                @Html.ActionLink("Type", "Index", new { sortOrder = ViewBag.TypeSortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th>
-                @Html.ActionLink("Genre", "Index", new { sortOrder = ViewBag.GenreSortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th>
-                @Html.ActionLink("Key", "Index", new { sortOrder = ViewBag.KeySortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
+    @using (Html.BeginForm("Index", "Sample", FormMethod.Get))
+    {
+        <p class="text-center">
+            @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
+    }
+</div>
+<table class="table-striped table-hover table-responsive-xl table-secondary m-auto w-auto">
+    <thead class="thead-dark w-auto">
 
-        </trclass="display-3">
+        <tr class="">
+            <th class="w-auto pr-5">
+                @Html.ActionLink("SAMPLE", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th class="w-auto pr-5">
+                @Html.ActionLink("AUTHOR", "Index", new { sortOrder = ViewBag.AuthorSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th class="w-auto pr-5">
+                @Html.ActionLink("TYPE", "Index", new { sortOrder = ViewBag.TypeSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th class="w-auto pr-5">
+                @Html.ActionLink("GENRE", "Index", new { sortOrder = ViewBag.GenreSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th class="w-auto pr-5">
+                @Html.ActionLink("KEY", "Index", new { sortOrder = ViewBag.KeySortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
 
     </thead>
-    <tbody>
+    <tbody class="pr-5">
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td class="pr-5">
                     @Html.DisplayFor(modelItem => item.SampleName)
                 </td>
-                <td>
+                <td class="pr-5">
                     @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
                 </td>
-                <td>
+                <td class="pr-5">
                     @Html.DisplayFor(modelItem => item.SampleType.Name)
                 </td>
-                <td>
+                <td class="pr-5">
                     @Html.DisplayFor(modelItem => item.Genre.Name)
                 </td>
-                <td>
+                <td class="pr-5">
                     @Html.DisplayFor(modelItem => item.MusicKey.Name)
                 </td>
                 <td>
-                    <audio controls>
+                    <audio controls class="pr-5">
                         <source src="~/@item.SamplePath" type="audio/mpeg">
 
                     </audio>
-                    <a asp-action="AddToFavorite" asp-route-applicationUserId="@item.ApplicationUserId" asp-route-sampleId="@item.Id"><i class="far fa-1x fa-star"></i></a>
-                    @{ if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
-                        {
-                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-1x fa-trash-alt"></i></a>
-                        }
+
+
+                    <a asp-action="AddToFavorite" asp-route-applicationUserId="@item.ApplicationUserId" asp-route-sampleId="@item.Id"><i class="far fa-1x fa-star text-warning pr-2"></i></a>
+                    @if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-1x fa-trash-alt text-danger"></i></a>
                     }
 
                 </td>
@@ -83,13 +83,15 @@
     </tbody>
 </table>
 <br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+<div class="d-flex justify-content-center">
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        @for (var i = 0; i < Model.PageCount; i++)
-        {
-            <li class="page-item"><a class="page-link" href="?page=@(i+1)">@(i + 1)</a></li>
-        }
-    </ul>
-</nav>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @for (var i = 0; i < Model.PageCount; i++)
+            {
+                <li class="page-item pl-2"><a class="page-link" href="?page=@(i+1)">@(i + 1)</a></li>
+            }
+        </ul>
+    </nav>
+</div>

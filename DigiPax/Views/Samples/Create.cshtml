@@ -14,26 +14,25 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div>
                 <label asp-for="Sample.SampleName" class="control-label"></label>
-                <input asp-for="Sample.SampleName" class="form-control" />
+                <input asp-for="Sample.SampleName" class="form-control col-3" />
                 <span asp-validation-for="Sample.SampleName" class="text-danger"></span>
             </div>
             <div>
                 <label asp-for="Sample.Genre" class="control-label"></label>
-                <select asp-for="Sample.GenreId" asp-items="@Model.Genres" class="form-control"></select>
+                <select asp-for="Sample.GenreId" asp-items="@Model.Genres" class="form-control col-3"></select>
                 <span asp-validation-for="Sample.GenreId" class="text-danger"></span>
             </div>
             <div>
                 <label asp-for="Sample.MusicKeyId" class="control-label"></label>
-                <select asp-for="Sample.MusicKeyId" asp-items="@Model.MusicKeys" class="form-control"></select>
+                <select asp-for="Sample.MusicKeyId" asp-items="@Model.MusicKeys" class="form-control col-3"></select>
                 <span asp-validation-for="Sample.MusicKeyId" class="text-danger"></span>
             </div>
             <div>
                 <label asp-for="Sample.SampleTypeId" class="control-label"></label>
-                <select asp-for="Sample.SampleTypeId" asp-items="@Model.SampleTypes" class="form-control"></select>
+                <select asp-for="Sample.SampleTypeId" asp-items="@Model.SampleTypes" class="form-control col-3"></select>
                 <span asp-validation-for="Sample.SampleTypeId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <p>Upload one or more files using this form:</p>
+            <div class="form-group mt-4">
                 <input type="file" name="file" />
             </div>
             <div>
@@ -46,7 +45,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index"><i class="fas fa-2x text-warning fa-arrow-left"></i></a>
 </div>
 
 @section Scripts {
