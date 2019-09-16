@@ -26,8 +26,8 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle"></i></a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-1x fa-trash-alt"></i></a>
+                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50"></i></a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-1x fa-minus-circle text-danger"></i></a>
                 </td>
             </tr>
         }

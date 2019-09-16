@@ -38,6 +38,7 @@ namespace DigiPax.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
+            [Display(Name ="Username")]
             public string ScreenName { get; set; }
 
             [Required]

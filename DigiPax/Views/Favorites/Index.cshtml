@@ -4,9 +4,10 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
 
-<h1 class="text-center"><strong>Collections</strong></h1>
+<h4 class="text-center display-4 text-white">Collection</></h4>
 
-<hr /><h3>My Favorites</h3>
+<hr /><h3 class="display-4 text-warning">My Favorites</h3>
+<h6>Your favorited samples from the pool will be displayed here...</h6>
 <table>
     <thead>
     </thead>
@@ -16,12 +17,12 @@
             @if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
             {
                 <tr>
-                    <td class="pr-3">
+                    <td class="pr-3 fa-2x">
                         @Html.DisplayFor(modelItem => item.Sample.SampleName)
                     </td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle"></i></a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-1x fa-trash-alt"></i></a>
+                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50"></i></a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-1x fa-minus-circle text-danger"></i></a>
                     </td>
                 </tr>
             }
@@ -29,8 +30,8 @@
     </tbody>
 </table>
 
-<hr /><h3>My Samples</h3>
-
+<hr /><h3 class="display-4 text-warning">My Samples</h3>
+      <h6>Samples you upload to the pool will be displayed here...</h6>
 <table>
     <thead>
 
@@ -39,11 +40,11 @@
         @foreach (var item in Model.Samples)
         {
             <tr>
-                <td class="pr-3">
+                <td class="pr-3 fa-2x">
                     @Html.DisplayFor(modelItem => item.SampleName)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle"></i></a>
+                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50"></i></a>
                 </td>
             </tr>
 
