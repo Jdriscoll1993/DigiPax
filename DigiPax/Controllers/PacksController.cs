@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DigiPax.Data;
 using DigiPax.Models;
+using DigiPax.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DigiPax.Controllers
 {
@@ -42,13 +44,13 @@ namespace DigiPax.Controllers
 
             return View(pack);
         }
-
-        // GET: Packs/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var viewModel = new PackCreateViewModel();
+            viewModel.Samples = new SelectList(await _context.Sample.ToListAsync(), "Id", "SampleName");
+            return View(viewModel);
         }
-
         // POST: Packs/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.

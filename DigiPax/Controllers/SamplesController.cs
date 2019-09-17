@@ -65,9 +65,6 @@ namespace DigiPax.Controllers
                 case "name_desc":
                     samples = samples.OrderByDescending(s => s.SampleName);
                     break;
-                case "Name":
-                    samples = samples.OrderBy(s => s.SampleName);
-                    break;
                 case "Genre":
                     samples = samples.OrderBy(s => s.Genre.Name);
                     break;
