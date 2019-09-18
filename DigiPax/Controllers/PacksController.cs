@@ -7,17 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DigiPax.Data;
 using DigiPax.Models;
+using DigiPax.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace DigiPax.Controllers
 {
     public class PacksController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PacksController(ApplicationDbContext context)
+        public PacksController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Packs
         public async Task<IActionResult> Index()
@@ -34,6 +40,7 @@ namespace DigiPax.Controllers
             }
 
             var pack = await _context.Pack
+                .Include(m => m.PackSamples)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pack == null)
             {
@@ -42,27 +49,48 @@ namespace DigiPax.Controllers
 
             return View(pack);
         }
-
-        // GET: Packs/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            return View();
-        }
+            var viewModel = new PackCreateViewModel();
+            viewModel.SampleIds = new List<int>()
+            {
+                0
+            };
 
+
+            ViewData["Samples"] = new SelectList(await _context.Sample.ToListAsync(), "Id", "SampleName");
+
+            return View(viewModel);
+        }
         // POST: Packs/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,UserId")] Pack pack)
+        public async Task<IActionResult> Create(PackCreateViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(pack);
+                var user = await GetCurrentUserAsync();
+                var newPack = new Pack()
+                {
+                    Title = viewModel.Pack.Title,
+                    ApplicationUserId = user.Id
+                };
+                _context.Add(newPack);
+                await _context.SaveChangesAsync();
+                var samplePacks = viewModel.SampleIds.Select(id => new PackSample()
+                {
+                    PackId = newPack.Id,
+                    SampleId = id,
+                });
+                _context.PackSample.AddRange(samplePacks);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(pack);
+            return View(viewModel);
         }
 
         // GET: Packs/Edit/5

@@ -44,7 +44,7 @@
                     @Html.DisplayFor(modelItem => item.SampleName)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50"></i></a>
+                    <a asp-controller="Samples" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50"></i></a>
                 </td>
             </tr>
 

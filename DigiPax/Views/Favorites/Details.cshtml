@@ -35,8 +35,14 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.MusicKey.Name)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BPM)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BPM)
+        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index"><i class="fa fa-2x fa-fast-backward"></i></a>
 </div>

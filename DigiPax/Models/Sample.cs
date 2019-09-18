@@ -35,6 +35,10 @@ namespace DigiPax.Models
         public int MusicKeyId { get; set; }
         public MusicKey MusicKey { get; set; }
 
+        public int BPM { get; set; }
+
+        public ICollection<PackSample> PackSamples { get; set; }
+
 
 
 

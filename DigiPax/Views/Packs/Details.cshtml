@@ -17,11 +17,14 @@
             @Html.DisplayFor(model => model.Title)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PackSample)
+            @Html.DisplayNameFor(model => model.PackSamples)
         </dt>
+        @foreach (var item in Model.PackSamples)
+        {
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PackSample)
+            @Html.DisplayFor(model => model.PackSamples)
         </dd>
+        }
     </dl>
 </div>
 <div>

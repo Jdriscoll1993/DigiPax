@@ -11,7 +11,7 @@
 }
 <div class="">
     <p>
-        <a asp-action="Create"><i class="fab fa-4x text-right text-warning btn-outline-secondary rounded-circle d-inline-block float-right fa-creative-commons-sampling-plus"></i></a>
+        <a asp-action="Create"><i class="fab fa-4x float-right text-warning btn-outline-secondary rounded-circle d-inline-block float-right fa-creative-commons-sampling-plus"></i></a>
     </p>
     <h1 class="text-center">Sample Pool</h1>
 
@@ -23,31 +23,37 @@
         </p>
     }
 </div>
-<table class="table-striped table-hover table-responsive-xl table-secondary">
-    <thead class="text-md-right text-secondary">
+@if (Model.PageCount != 0)
+{
+    <table class="table-striped table-hover table-responsive-xl table-secondary">
+        <thead class="text-md-right text-secondary">
 
-        <tr class="fa-2x pl-4">
-            <th class="w-auto pr-5 pt-3 pl-4 text-warning">
-                @Html.ActionLink("SAMPLE", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th class="w-auto pr-2 pt-3">
-                @Html.ActionLink("AUTHOR", "Index", new { sortOrder = ViewBag.AuthorSortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th class="w-auto pr-5 pt-3">
-                @Html.ActionLink("TYPE", "Index", new { sortOrder = ViewBag.TypeSortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th class="w-auto pr-5 pt-3">
-                @Html.ActionLink("GENRE", "Index", new { sortOrder = ViewBag.GenreSortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th class="w-auto pr-5 pt-3">
-                @Html.ActionLink("KEY", "Index", new { sortOrder = ViewBag.KeySortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
+            <tr class="fa-2x pl-4">
+                <th class="w-auto pr-5 pt-3 pl-4 text-warning">
+                    @Html.ActionLink("SAMPLE", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                </th>
+                <th class="w-auto pr-2 pt-3">
+                    @Html.ActionLink("AUTHOR", "Index", new { sortOrder = ViewBag.AuthorSortParm, currentFilter = ViewBag.CurrentFilter })
+                </th>
+                <th class="w-auto pr-5 pt-3">
+                    @Html.ActionLink("TYPE", "Index", new { sortOrder = ViewBag.TypeSortParm, currentFilter = ViewBag.CurrentFilter })
+                </th>
+                <th class="w-auto pr-5 pt-3">
+                    @Html.ActionLink("GENRE", "Index", new { sortOrder = ViewBag.GenreSortParm, currentFilter = ViewBag.CurrentFilter })
+                </th>
+                <th class="w-auto pr-5 pt-3">
+                    @Html.ActionLink("KEY", "Index", new { sortOrder = ViewBag.KeySortParm, currentFilter = ViewBag.CurrentFilter })
+                </th>
+                <th class="w-auto pr-5 pt-3">
+                    @Html.ActionLink("BPM", "Index", new { sortOrder = ViewBag.BPMSortParm, currentFilter = ViewBag.CurrentFilter })
+                </th>
 
-    </thead>
-    <tbody class="text-sm-right">
-        @foreach (var item in Model)
-        {
-            <tr >
+
+</thead>
+        <tbody class="text-sm-right">
+            @foreach (var item in Model)
+            {
+            <tr>
                 <td class="w-auto pr-5 font-weight-bolder text-white-50">
                     @Html.DisplayFor(modelItem => item.SampleName)
                 </td>
@@ -63,6 +69,9 @@
                 <td class="w-auto pr-5 text-white-50 font-weight-bold">
                     @Html.DisplayFor(modelItem => item.MusicKey.Name)
                 </td>
+                <td class="w-auto pr-5 text-white-50 font-weight-bold">
+                    @Html.DisplayFor(modelItem => item.BPM)
+                </td>
                 <td>
                     <audio controls class="pt-4 pr-3 m-auto">
                         <source src="~/@item.SamplePath" type="audio/mpeg">
@@ -72,24 +81,37 @@
                     {
                         <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-1x fa-minus-circle text-danger mr-3"></i></a>
                     }
+
                     <a asp-action="AddToFavorite" asp-route-applicationUserId="@item.ApplicationUserId" asp-route-sampleId="@item.Id"><i class="far fa-1x fa-star text-warning mr-4"></i></a>
 
                 </td>
             </tr>
-        }
+            }
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
+}
+else
+{
+    <h1 class="text-center d-inlne-block mt-5 display-4">No Search Results</h1>
+}
 <br />
 <div class="d-flex justify-content-center fixed-bottom">
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
     <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            @for (var i = 0; i < Model.PageCount; i++)
+        <div class="pagination">
+            @if (Model.PageCount != 0)
             {
-                <li class="page-item pl-2"><a class="page-link" href="?page=@(i+1)">@(i + 1)</a></li>
+                @for (var i = 0; i < Model.PageCount; i++)
+                {
+                    <h5 class="page-item pl-2"><a class="page-link" href="?page=@(i + 1)">@(i + 1)</a></h5>
+                }
             }
-        </ul>
+            else
+            {
+
+            }
+        </div>
     </nav>
 </div>

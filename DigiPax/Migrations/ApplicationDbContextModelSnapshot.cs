@@ -77,13 +77,13 @@ namespace DigiPax.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a30ab480-54d7-4045-802d-1100a98707a6",
+                            ConcurrencyStamp = "373f9eb4-3cd0-49c0-9c42-c36461155b0a",
                             Email = "joey@driscoll.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "JOEY@DRISCOLL.COM",
                             NormalizedUserName = "JOEYALAKING",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHH386eyRi4aIUKcn+iBJu7kU3R3NXBtxUSfCktcm+WE5bcUJO928JuXg9/z1ONXug==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJwj9rfmUWGfOmCAqenvWrR33LZOpRen9ijr3VpLqms2/2evp908ll7XMLHcWVhirA==",
                             PhoneNumberConfirmed = false,
                             ScreenName = "Joey",
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
@@ -451,8 +451,6 @@ namespace DigiPax.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<int>("UserId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
@@ -472,8 +470,7 @@ namespace DigiPax.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PackId")
-                        .IsUnique();
+                    b.HasIndex("PackId");
 
                     b.HasIndex("SampleId");
 
@@ -488,6 +485,8 @@ namespace DigiPax.Migrations
 
                     b.Property<string>("ApplicationUserId")
                         .IsRequired();
+
+                    b.Property<int>("BPM");
 
                     b.Property<int>("GenreId");
 
@@ -517,6 +516,7 @@ namespace DigiPax.Migrations
                         {
                             Id = 1,
                             ApplicationUserId = "00000000-ffff-ffff-ffff-ffffffffffff",
+                            BPM = 100,
                             GenreId = 1,
                             MusicKeyId = 1,
                             SampleName = "Test Sample",
@@ -851,12 +851,12 @@ namespace DigiPax.Migrations
             modelBuilder.Entity("DigiPax.Models.PackSample", b =>
                 {
                     b.HasOne("DigiPax.Models.Pack", "Pack")
-                        .WithOne("PackSample")
-                        .HasForeignKey("DigiPax.Models.PackSample", "PackId")
+                        .WithMany("PackSamples")
+                        .HasForeignKey("PackId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DigiPax.Models.Sample", "Sample")
-                        .WithMany()
+                        .WithMany("PackSamples")
                         .HasForeignKey("SampleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
