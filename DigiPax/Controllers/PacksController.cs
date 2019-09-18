@@ -52,6 +52,11 @@ namespace DigiPax.Controllers
         public async Task<IActionResult> Create()
         {
             var viewModel = new PackCreateViewModel();
+            viewModel.SampleIds = new List<int>()
+            {
+                0
+            };
+
 
             ViewData["Samples"] = new SelectList(await _context.Sample.ToListAsync(), "Id", "SampleName");
 

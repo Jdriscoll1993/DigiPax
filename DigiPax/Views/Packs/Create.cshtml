@@ -18,8 +18,8 @@
                 <span asp-validation-for="Pack.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Pack.PackSample.Sample.SampleName" class="control-label"></label>
-                <select asp-for="Pack.PackSample.Sample.Id" asp-items="@Model.Samples" class="form-control"></select>
+                <label asp-for="SampleIds[0]" class="control-label"></label>
+                <select asp-for="SampleIds[0]" asp-items="ViewBag.Samples" class="form-control"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

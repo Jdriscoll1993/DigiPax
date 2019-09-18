@@ -17,6 +17,6 @@ namespace DigiPax.Models.ViewModels
         ////public Sample Sample { get; set; }
         ////public PackSample PackSample { get; set; }
 
-        public virtual IEnumerable<SelectListItem> Samples { get; set; }
+        //public virtual IEnumerable<SelectListItem> Samples { get; set; }
     }
 }

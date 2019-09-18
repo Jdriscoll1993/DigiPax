@@ -263,6 +263,7 @@ namespace DigiPax.Data
                     SampleTypeId = 1,
                     MusicKeyId = 1,
                     GenreId = 1,
+                    BPM = 100
                 });
             //TYPE
             modelBuilder.Entity<SampleType>().HasData(

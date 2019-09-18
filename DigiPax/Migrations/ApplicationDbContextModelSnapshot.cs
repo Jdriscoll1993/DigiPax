@@ -77,13 +77,13 @@ namespace DigiPax.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a30ab480-54d7-4045-802d-1100a98707a6",
+                            ConcurrencyStamp = "d0669e1e-f534-4c7c-b76a-b957985f3136",
                             Email = "joey@driscoll.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "JOEY@DRISCOLL.COM",
                             NormalizedUserName = "JOEYALAKING",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHH386eyRi4aIUKcn+iBJu7kU3R3NXBtxUSfCktcm+WE5bcUJO928JuXg9/z1ONXug==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENQ75XC5Az5ykr0/aWhqTDnPDEvqqfvkJVrqz9vpwliTFyaN1ABCCYC6qahuZw4Lew==",
                             PhoneNumberConfirmed = false,
                             ScreenName = "Joey",
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
@@ -451,8 +451,6 @@ namespace DigiPax.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<int>("UserId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
@@ -489,6 +487,8 @@ namespace DigiPax.Migrations
                     b.Property<string>("ApplicationUserId")
                         .IsRequired();
 
+                    b.Property<int>("BPM");
+
                     b.Property<int>("GenreId");
 
                     b.Property<int>("MusicKeyId");
@@ -517,6 +517,7 @@ namespace DigiPax.Migrations
                         {
                             Id = 1,
                             ApplicationUserId = "00000000-ffff-ffff-ffff-ffffffffffff",
+                            BPM = 100,
                             GenreId = 1,
                             MusicKeyId = 1,
                             SampleName = "Test Sample",

@@ -200,7 +200,6 @@ namespace DigiPax.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(nullable: true),
-                    UserId = table.Column<int>(nullable: false),
                     ApplicationUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -225,7 +224,8 @@ namespace DigiPax.Migrations
                     ApplicationUserId = table.Column<string>(nullable: false),
                     SampleTypeId = table.Column<int>(nullable: false),
                     GenreId = table.Column<int>(nullable: false),
-                    MusicKeyId = table.Column<int>(nullable: false)
+                    MusicKeyId = table.Column<int>(nullable: false),
+                    BPM = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -262,7 +262,6 @@ namespace DigiPax.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>(nullable: false),
                     ApplicationUserId = table.Column<string>(nullable: true),
                     SampleId = table.Column<int>(nullable: false)
                 },
@@ -312,7 +311,7 @@ namespace DigiPax.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ScreenName", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "00000000-ffff-ffff-ffff-ffffffffffff", 0, "6f203fa2-6cb7-4ecc-9304-f2f0f19abc45", "joey@driscoll.com", true, false, null, "JOEY@DRISCOLL.COM", "JOEYALAKING", "AQAAAAEAACcQAAAAEAENgJFD6A/KXpYQjWk9S6uRQFveShJVj9YkX243nSshwX/E+6x+aWaUSGXKoevHYw==", null, false, "Joey", "7f434309-a4d9-48e9-9ebb-8803db794577", false, "JoeyALaKing" });
+                values: new object[] { "00000000-ffff-ffff-ffff-ffffffffffff", 0, "d0669e1e-f534-4c7c-b76a-b957985f3136", "joey@driscoll.com", true, false, null, "JOEY@DRISCOLL.COM", "JOEYALAKING", "AQAAAAEAACcQAAAAENQ75XC5Az5ykr0/aWhqTDnPDEvqqfvkJVrqz9vpwliTFyaN1ABCCYC6qahuZw4Lew==", null, false, "Joey", "7f434309-a4d9-48e9-9ebb-8803db794577", false, "JoeyALaKing" });
 
             migrationBuilder.InsertData(
                 table: "Genre",
@@ -320,8 +319,8 @@ namespace DigiPax.Migrations
                 values: new object[,]
                 {
                     { 21, "Techno" },
+                    { 22, "House" },
                     { 23, "Tech House" },
-                    { 24, "Deep House" },
                     { 25, "Disco" },
                     { 26, "Electro" },
                     { 27, "UK Garage" },
@@ -336,17 +335,17 @@ namespace DigiPax.Migrations
                     { 36, "Dubstep" },
                     { 20, "Tropical House" },
                     { 19, "Future House" },
-                    { 22, "House" },
+                    { 24, "Deep House" },
                     { 17, "Trance" },
                     { 1, "Rock" },
                     { 2, "Jazz" },
                     { 3, "Blues" },
-                    { 4, "Funk" },
-                    { 5, "Dub" },
                     { 18, "Psytrance" },
+                    { 5, "Dub" },
+                    { 6, "Reggae" },
                     { 7, "Folk" },
                     { 8, "Heavy Metal" },
-                    { 6, "Reggae" },
+                    { 4, "Funk" },
                     { 10, "Trap" },
                     { 11, "R&B" },
                     { 12, "Soul" },
@@ -362,23 +361,30 @@ namespace DigiPax.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 11, "Ab" },
-                    { 17, "A#" },
-                    { 16, "G#" },
-                    { 15, "F#" },
-                    { 14, "D#" },
-                    { 13, "C#" },
-                    { 12, "Bb" },
-                    { 10, "Gb" },
-                    { 8, "Db" },
+                    { 15, "Db" },
+                    { 16, "Eb" },
+                    { 17, "Gb" },
+                    { 18, "Ab" },
+                    { 19, "Bb" },
+                    { 23, "G#" },
+                    { 21, "D#" },
+                    { 22, "F#" },
+                    { 24, "A#" },
+                    { 14, "Bm" },
+                    { 20, "C#" },
+                    { 13, "Am" },
+                    { 11, "Fm" },
+                    { 3, "E" },
+                    { 10, "Em" },
+                    { 9, "Dm" },
+                    { 8, "Cm" },
                     { 7, "B" },
                     { 6, "A" },
                     { 5, "G" },
                     { 4, "F" },
-                    { 3, "E" },
                     { 2, "D" },
                     { 1, "C" },
-                    { 9, "Eb" }
+                    { 12, "Gm" }
                 });
 
             migrationBuilder.InsertData(
@@ -386,24 +392,24 @@ namespace DigiPax.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
+                    { 23, "Impacts" },
+                    { 22, "Textures" },
                     { 34, "Cymbals" },
                     { 20, "Stabs" },
-                    { 21, "Bells" },
-                    { 22, "Textures" },
-                    { 23, "Impacts" },
                     { 24, "Grooves" },
+                    { 21, "Bells" },
                     { 25, "Strings" },
-                    { 29, "Hats" },
+                    { 31, "Claps" },
                     { 27, "Kicks" },
                     { 28, "Snares" },
-                    { 19, "Pads" },
+                    { 29, "Hats" },
                     { 30, "Toms" },
-                    { 31, "Claps" },
+                    { 19, "Pads" },
                     { 32, "Shakers" },
                     { 33, "Crashes" },
                     { 26, "Sub" },
                     { 18, "FX" },
-                    { 14, "808" },
+                    { 12, "Downers" },
                     { 16, "Arp" },
                     { 1, "Drums" },
                     { 2, "Bass" },
@@ -416,8 +422,8 @@ namespace DigiPax.Migrations
                     { 9, "Ryhthm" },
                     { 10, "MusicKeys" },
                     { 11, "Risers" },
-                    { 12, "Downers" },
                     { 13, "Transitions" },
+                    { 14, "808" },
                     { 15, "Piano" },
                     { 8, "Melody" },
                     { 35, "Fills" }
@@ -425,8 +431,8 @@ namespace DigiPax.Migrations
 
             migrationBuilder.InsertData(
                 table: "Sample",
-                columns: new[] { "Id", "ApplicationUserId", "GenreId", "MusicKeyId", "SampleName", "SamplePath", "SampleTypeId" },
-                values: new object[] { 1, "00000000-ffff-ffff-ffff-ffffffffffff", 1, 1, "Test Sample", "/AudioFiles", 1 });
+                columns: new[] { "Id", "ApplicationUserId", "BPM", "GenreId", "MusicKeyId", "SampleName", "SamplePath", "SampleTypeId" },
+                values: new object[] { 1, "00000000-ffff-ffff-ffff-ffffffffffff", 100, 1, 1, "Test Sample", "/AudioFiles", 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

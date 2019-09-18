@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigiPax.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190910190202_Initial")]
+    [Migration("20190918150039_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,13 +79,13 @@ namespace DigiPax.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6f203fa2-6cb7-4ecc-9304-f2f0f19abc45",
+                            ConcurrencyStamp = "d0669e1e-f534-4c7c-b76a-b957985f3136",
                             Email = "joey@driscoll.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "JOEY@DRISCOLL.COM",
                             NormalizedUserName = "JOEYALAKING",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAENgJFD6A/KXpYQjWk9S6uRQFveShJVj9YkX243nSshwX/E+6x+aWaUSGXKoevHYw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENQ75XC5Az5ykr0/aWhqTDnPDEvqqfvkJVrqz9vpwliTFyaN1ABCCYC6qahuZw4Lew==",
                             PhoneNumberConfirmed = false,
                             ScreenName = "Joey",
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
@@ -103,8 +103,6 @@ namespace DigiPax.Migrations
                     b.Property<string>("ApplicationUserId");
 
                     b.Property<int>("SampleId");
-
-                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
@@ -361,51 +359,86 @@ namespace DigiPax.Migrations
                         new
                         {
                             Id = 8,
-                            Name = "Db"
+                            Name = "Cm"
                         },
                         new
                         {
                             Id = 9,
-                            Name = "Eb"
+                            Name = "Dm"
                         },
                         new
                         {
                             Id = 10,
-                            Name = "Gb"
+                            Name = "Em"
                         },
                         new
                         {
                             Id = 11,
-                            Name = "Ab"
+                            Name = "Fm"
                         },
                         new
                         {
                             Id = 12,
-                            Name = "Bb"
+                            Name = "Gm"
                         },
                         new
                         {
                             Id = 13,
-                            Name = "C#"
+                            Name = "Am"
                         },
                         new
                         {
                             Id = 14,
-                            Name = "D#"
+                            Name = "Bm"
                         },
                         new
                         {
                             Id = 15,
-                            Name = "F#"
+                            Name = "Db"
                         },
                         new
                         {
                             Id = 16,
-                            Name = "G#"
+                            Name = "Eb"
                         },
                         new
                         {
                             Id = 17,
+                            Name = "Gb"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Name = "Ab"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Name = "Bb"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Name = "C#"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Name = "D#"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Name = "F#"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Name = "G#"
+                        },
+                        new
+                        {
+                            Id = 24,
                             Name = "A#"
                         });
                 });
@@ -419,8 +452,6 @@ namespace DigiPax.Migrations
                     b.Property<string>("ApplicationUserId");
 
                     b.Property<string>("Title");
-
-                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
@@ -458,6 +489,8 @@ namespace DigiPax.Migrations
                     b.Property<string>("ApplicationUserId")
                         .IsRequired();
 
+                    b.Property<int>("BPM");
+
                     b.Property<int>("GenreId");
 
                     b.Property<int>("MusicKeyId");
@@ -486,6 +519,7 @@ namespace DigiPax.Migrations
                         {
                             Id = 1,
                             ApplicationUserId = "00000000-ffff-ffff-ffff-ffffffffffff",
+                            BPM = 100,
                             GenreId = 1,
                             MusicKeyId = 1,
                             SampleName = "Test Sample",

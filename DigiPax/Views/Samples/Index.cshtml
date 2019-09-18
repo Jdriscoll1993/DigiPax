@@ -44,40 +44,48 @@
                 <th class="w-auto pr-5 pt-3">
                     @Html.ActionLink("KEY", "Index", new { sortOrder = ViewBag.KeySortParm, currentFilter = ViewBag.CurrentFilter })
                 </th>
+                <th class="w-auto pr-5 pt-3">
+                    @Html.ActionLink("BPM", "Index", new { sortOrder = ViewBag.BPMSortParm, currentFilter = ViewBag.CurrentFilter })
+                </th>
 
-        </thead>
+
+</thead>
         <tbody class="text-sm-right">
             @foreach (var item in Model)
             {
-                <tr>
-                    <td class="w-auto pr-5 font-weight-bolder text-white-50">
-                        @Html.DisplayFor(modelItem => item.SampleName)
-                    </td>
-                    <td class="w-auto pr-5 text-black-50 font-weight-bold">
-                        @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-                    </td>
-                    <td class="w-auto pr-5 text-white-50 font-weight-bold">
-                        @Html.DisplayFor(modelItem => item.SampleType.Name)
-                    </td>
-                    <td class="w-auto pr-5 text-black-50 font-weight-bold">
-                        @Html.DisplayFor(modelItem => item.Genre.Name)
-                    </td>
-                    <td class="w-auto pr-5 text-white-50 font-weight-bold">
-                        @Html.DisplayFor(modelItem => item.MusicKey.Name)
-                    </td>
-                    <td>
-                        <audio controls class="pt-4 pr-3 m-auto">
-                            <source src="~/@item.SamplePath" type="audio/mpeg">
+            <tr>
+                <td class="w-auto pr-5 font-weight-bolder text-white-50">
+                    @Html.DisplayFor(modelItem => item.SampleName)
+                </td>
+                <td class="w-auto pr-5 text-black-50 font-weight-bold">
+                    @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                </td>
+                <td class="w-auto pr-5 text-white-50 font-weight-bold">
+                    @Html.DisplayFor(modelItem => item.SampleType.Name)
+                </td>
+                <td class="w-auto pr-5 text-black-50 font-weight-bold">
+                    @Html.DisplayFor(modelItem => item.Genre.Name)
+                </td>
+                <td class="w-auto pr-5 text-white-50 font-weight-bold">
+                    @Html.DisplayFor(modelItem => item.MusicKey.Name)
+                </td>
+                <td class="w-auto pr-5 text-white-50 font-weight-bold">
+                    @Html.DisplayFor(modelItem => item.BPM)
+                </td>
+                <td>
+                    <audio controls class="pt-4 pr-3 m-auto">
+                        <source src="~/@item.SamplePath" type="audio/mpeg">
 
-                        </audio>
-                        @if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
-                        {
-                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-1x fa-minus-circle text-danger mr-3"></i></a>
-                        }
-                        <a asp-action="AddToFavorite" asp-route-applicationUserId="@item.ApplicationUserId" asp-route-sampleId="@item.Id"><i class="far fa-1x fa-star text-warning mr-4"></i></a>
+                    </audio>
+                    @if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-1x fa-minus-circle text-danger mr-3"></i></a>
+                    }
 
-                    </td>
-                </tr>
+                    <a asp-action="AddToFavorite" asp-route-applicationUserId="@item.ApplicationUserId" asp-route-sampleId="@item.Id"><i class="far fa-1x fa-star text-warning mr-4"></i></a>
+
+                </td>
+            </tr>
             }
 
         </tbody>

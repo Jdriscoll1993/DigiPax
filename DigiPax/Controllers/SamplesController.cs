@@ -35,6 +35,7 @@ namespace DigiPax.Controllers
 
             ViewBag.SampleNameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "Name";
             ViewBag.GenreSortParm = sortOrder == "Genre" ? "genre_desc" : "Genre";
+            ViewBag.BPMSortParm = sortOrder == "BPM" ? "bpm_desc" : "BPM";
             ViewBag.KeySortParm = sortOrder == "Key" ? "key_desc" : "Key";
             ViewBag.TypeSortParm = sortOrder == "Type" ? "type_desc" : "Type";
             ViewBag.AuthorSortParm = sortOrder == "Author" ? "author_desc" : "Author";
@@ -70,6 +71,12 @@ namespace DigiPax.Controllers
                     break;
                 case "genre_desc":
                     samples = samples.OrderByDescending(s => s.Genre.Name);
+                    break;
+                case "BPM":
+                    samples = samples.OrderBy(s => s.BPM);
+                    break;
+                case "bpm_desc":
+                    samples = samples.OrderByDescending(s => s.BPM);
                     break;
                 case "Type":
                     samples = samples.OrderBy(s => s.SampleType.Name);
@@ -147,7 +154,7 @@ namespace DigiPax.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SampleName,SampleTypeId,GenreId,MusicKeyId,SamplePath")] Sample sample, IFormFile file)
+        public async Task<IActionResult> Create([Bind("Id,SampleName,SampleTypeId,GenreId,MusicKeyId,SamplePath,BPM")] Sample sample, IFormFile file)
         {
             if (file != null)
             {
