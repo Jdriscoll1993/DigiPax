@@ -9,17 +9,21 @@ using DigiPax.Data;
 using DigiPax.Models;
 using DigiPax.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace DigiPax.Controllers
 {
     public class PacksController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PacksController(ApplicationDbContext context)
+        public PacksController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Packs
         public async Task<IActionResult> Index()
@@ -48,7 +52,9 @@ namespace DigiPax.Controllers
         public async Task<IActionResult> Create()
         {
             var viewModel = new PackCreateViewModel();
-            viewModel.Samples = new SelectList(await _context.Sample.ToListAsync(), "Id", "SampleName");
+
+            ViewData["Samples"] = new SelectList(await _context.Sample.ToListAsync(), "Id", "SampleName");
+
             return View(viewModel);
         }
         // POST: Packs/Create
@@ -56,15 +62,26 @@ namespace DigiPax.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,UserId")] Pack pack)
+        public async Task<IActionResult> Create(PackCreateViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(pack);
+                var user = await GetCurrentUserAsync();
+                var samplePacks = viewModel.SampleIds.Select(id => new PackSample()
+                {
+                    SampleId = id,
+                    Pack = new Pack()
+                    {
+                        Title = viewModel.Pack.Title,
+                        ApplicationUserId = user.Id
+                    }
+                });
+                _context.AddRange(samplePacks);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(pack);
+            return View(viewModel);
         }
 
         // GET: Packs/Edit/5

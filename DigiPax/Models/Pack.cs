@@ -14,7 +14,7 @@ namespace DigiPax.Models
         public string Title { get; set; }
         [Display(Name = "Sample")]
         public PackSample PackSample { get; set; }
-        public int UserId { get; set; }
+        public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
     }
 }
