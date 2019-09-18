@@ -37,7 +37,7 @@ namespace DigiPax.Models
 
         public int BPM { get; set; }
 
-        public ICollection<PackSample> PackSample { get; set; }
+        public ICollection<PackSample> PackSamples { get; set; }
 
 
 

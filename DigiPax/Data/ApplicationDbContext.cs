@@ -42,6 +42,17 @@ namespace DigiPax.Data
                  .HasForeignKey(s => s.GenreId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+        //    modelBuilder.Entity<PackSample>()
+        //.HasKey(bc => new { bc.PackId, bc.SampleId });
+        //    modelBuilder.Entity<PackSample>()
+        //        .HasOne(bc => bc.Pack)
+        //        .WithMany(b => b.PackSamples)
+        //        .HasForeignKey(bc => bc.PackId);
+        //    modelBuilder.Entity<PackSample>()
+        //        .HasOne(bc => bc.Sample)
+        //        .WithMany(c => c.PackSamples)
+        //        .HasForeignKey(bc => bc.SampleId);
+
             base.OnModelCreating(modelBuilder);
             ApplicationUser user = new ApplicationUser
             {

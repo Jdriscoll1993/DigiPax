@@ -40,7 +40,7 @@ namespace DigiPax.Controllers
             }
 
             var pack = await _context.Pack
-                .Include(m => m.PackSample)
+                .Include(m => m.PackSamples)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pack == null)
             {
@@ -73,16 +73,19 @@ namespace DigiPax.Controllers
             if (ModelState.IsValid)
             {
                 var user = await GetCurrentUserAsync();
+                var newPack = new Pack()
+                {
+                    Title = viewModel.Pack.Title,
+                    ApplicationUserId = user.Id
+                };
+                _context.Add(newPack);
+                await _context.SaveChangesAsync();
                 var samplePacks = viewModel.SampleIds.Select(id => new PackSample()
                 {
+                    PackId = newPack.Id,
                     SampleId = id,
-                    Pack = new Pack()
-                    {
-                        Title = viewModel.Pack.Title,
-                        ApplicationUserId = user.Id
-                    }
                 });
-                _context.AddRange(samplePacks);
+                _context.PackSample.AddRange(samplePacks);
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

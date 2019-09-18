@@ -4,26 +4,24 @@
 // Write your JavaScript code.
 var formInput = document.getElementsByClassName("form-row");
 
-
-
 document.getElementById("add-sample").addEventListener("click", function () {
     var elements = document.querySelectorAll(".sample-item");
     var count = elements.length;
 
     var newSampleLabel = document.createElement("label");
 
-    var newSampleInput = document.createElement("select");
+    var newSampleInput = document.querySelector("#name-select").cloneNode(true);
 
     newSampleLabel.setAttribute("class", "control-label");
     newSampleLabel.setAttribute("id", "name-label");
-    newSampleLabel.setAttribute("for", "Sample" + count + "__Name");
+    newSampleLabel.setAttribute("for", "Sample" + count);
 
     newSampleLabel.innerHTML = "Name";
 
     newSampleInput.setAttribute("class", "form-control");
     newSampleInput.setAttribute("id", "name-select");
 
-    newSampleInput.setAttribute("name", "Samples[" + count + "].Name");
+    newSampleInput.setAttribute("name", "SampleIds[" + count + "]");
 
     newSampleInput.setAttribute("type", "text");
 
@@ -44,4 +42,12 @@ document.getElementById("add-sample").addEventListener("click", function () {
     rowDiv.append(sampleDiv);
 
     formContainer.append(formGroupDiv);
+
+
+    ////opt is type NodeList
+    //var opt = document.querySelectorAll("option");
+    //var select = document.querySelector("#name-select");
+    ////foreach over options => o append select
+
+
 });
