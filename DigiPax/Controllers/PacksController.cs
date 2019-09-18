@@ -40,6 +40,7 @@ namespace DigiPax.Controllers
             }
 
             var pack = await _context.Pack
+                .Include(m => m.PackSample)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pack == null)
             {
