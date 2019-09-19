@@ -10,6 +10,7 @@ using DigiPax.Models;
 using DigiPax.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.ObjectModel;
 
 namespace DigiPax.Controllers
 {
@@ -34,20 +35,33 @@ namespace DigiPax.Controllers
         // GET: Packs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var viewModel = new PackDetailsViewModel();
+
             if (id == null)
             {
                 return NotFound();
             }
-
             var pack = await _context.Pack
                 .Include(m => m.PackSamples)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (pack == null)
             {
                 return NotFound();
             }
 
-            return View(pack);
+            viewModel.Pack = pack;
+            var packSampleList = pack.PackSamples.ToList<PackSample>();
+            var idList = new List<int?>();
+
+            packSampleList.ForEach(ps =>
+            {
+                idList.Add(ps.SampleId);
+            });
+
+            viewModel.PackSamples = _context.Sample.Where(s => idList.Contains(s.Id)).ToList();
+
+            return View(viewModel);
         }
         [HttpGet]
         public async Task<IActionResult> Create()

@@ -106,9 +106,52 @@ namespace DigiPax.Controllers
             {
                 samples = samples.Where(s => s.SampleName.Contains(searchString));
             }
-            int pageSize = 5;
+
+            var listIds = new List<int?>();
+
+            var sampleList = samples.ToList();
+
+            sampleList.ForEach(s =>
+            {
+                listIds.Add(s.Id);
+            });
+
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            var filteredFavs = new List<Favorite>();
+
+            var favs = _context.Favorite.Where(favorite => listIds.Contains(favorite.SampleId)).ToList();
+
+            favs.ForEach(f =>
+            {
+                if (f.ApplicationUserId == user.Id)
+                {
+                    filteredFavs.Add(f);
+                };
+            });
+
+
+            sampleList.ForEach(samp =>
+            {
+                filteredFavs.ForEach(fav =>
+                {
+                    if (fav.SampleId == samp.Id)
+                    {
+                        samp.isFavorite = true;
+                    } else
+                    {
+                        samp.isFavorite = false;
+                    }
+                });
+
+            });
+
+
+            int pageSize = 1;
             int pageNumber = (page ?? 1);
-            return View(samples.ToPagedList(pageNumber, pageSize));
+            var viewModel = new MainSampleListViewModel();
+            viewModel.Sample = (sampleList.ToPagedList(pageNumber, pageSize));
+            return View(viewModel);
 
         }
 
@@ -211,6 +254,16 @@ namespace DigiPax.Controllers
             await _context.Favorite.AddAsync(favorite);
             await _context.SaveChangesAsync();
 
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> RemoveFromFavorite(int sampleId)
+        {
+            var favorite = new Favorite();
+            ApplicationUser user = await GetCurrentUserAsync();
+            _context.Favorite.RemoveRange(_context.Favorite
+                .Where(fav => fav.ApplicationUserId == user.Id && fav.SampleId == sampleId));
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

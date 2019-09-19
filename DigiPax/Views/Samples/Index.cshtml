@@ -1,6 +1,6 @@
 ﻿@inject UserManager<ApplicationUser> UserManager
 
-@model X.PagedList.IPagedList<DigiPax.Models.Sample>
+@model DigiPax.Models.ViewModels.MainSampleListViewModel
 @using X.PagedList.Mvc.Core;
 @using Microsoft.AspNetCore.Identity
 
@@ -23,7 +23,7 @@
         </p>
     }
 </div>
-@if (Model.PageCount != 0)
+@if (Model.Sample.PageCount != 0)
 {
     <table class="table-striped table-hover table-responsive-xl table-secondary">
         <thead class="text-md-right text-secondary">
@@ -32,7 +32,7 @@
                 <th class="w-auto pr-5 pt-3 pl-4 text-warning">
                     @Html.ActionLink("SAMPLE", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
                 </th>
-                <th class="w-auto pr-2 pt-3">
+                <th class="w-auto pr-5 pt-3">
                     @Html.ActionLink("AUTHOR", "Index", new { sortOrder = ViewBag.AuthorSortParm, currentFilter = ViewBag.CurrentFilter })
                 </th>
                 <th class="w-auto pr-5 pt-3">
@@ -49,43 +49,53 @@
                 </th>
 
 
-</thead>
+        </thead>
         <tbody class="text-sm-right">
-            @foreach (var item in Model)
+            @foreach (var item in Model.Sample)
             {
-            <tr>
-                <td class="w-auto pr-5 font-weight-bolder text-white-50">
-                    @Html.DisplayFor(modelItem => item.SampleName)
-                </td>
-                <td class="w-auto pr-5 text-black-50 font-weight-bold">
-                    @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-                </td>
-                <td class="w-auto pr-5 text-white-50 font-weight-bold">
-                    @Html.DisplayFor(modelItem => item.SampleType.Name)
-                </td>
-                <td class="w-auto pr-5 text-black-50 font-weight-bold">
-                    @Html.DisplayFor(modelItem => item.Genre.Name)
-                </td>
-                <td class="w-auto pr-5 text-white-50 font-weight-bold">
-                    @Html.DisplayFor(modelItem => item.MusicKey.Name)
-                </td>
-                <td class="w-auto pr-5 text-white-50 font-weight-bold">
-                    @Html.DisplayFor(modelItem => item.BPM)
-                </td>
-                <td>
-                    <audio controls class="pt-4 pr-3 m-auto">
-                        <source src="~/@item.SamplePath" type="audio/mpeg">
+                <tr>
+                    <td class="w-auto pr-5 font-weight-bolder text-white-50">
+                        @Html.DisplayFor(modelItem => item.SampleName)
+                    </td>
+                    <td class="w-auto pr-5 text-black-50 font-weight-bold">
+                        @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                    </td>
+                    <td class="w-auto pr-5 text-white-50 font-weight-bold">
+                        @Html.DisplayFor(modelItem => item.SampleType.Name)
+                    </td>
+                    <td class="w-auto pr-5 text-black-50 font-weight-bold">
+                        @Html.DisplayFor(modelItem => item.Genre.Name)
+                    </td>
+                    <td class="w-auto pr-5 text-white-50 font-weight-bold">
+                        @Html.DisplayFor(modelItem => item.MusicKey.Name)
+                    </td>
+                    <td class="w-auto pr-5 text-white-50 font-weight-bold">
+                        @Html.DisplayFor(modelItem => item.BPM)
+                    </td>
+                    <td>
+                        <audio controls class="pt-4 pr-3 m-auto">
+                            <source src="~/@item.SamplePath" type="audio/mpeg">
 
-                    </audio>
-                    @if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
-                    {
-                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-1x fa-minus-circle text-danger mr-3"></i></a>
-                    }
+                        </audio>
+                        @if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-1x fa-minus-circle text-danger mr-3"></i></a>
+                        }
+                        @if (item.isFavorite == false)
+                        {
+                            <a asp-action="AddToFavorite" asp-route-applicationUserId="@item.ApplicationUserId" asp-route-sampleId="@item.Id"><i class="far fa-1x fa-star text-warning mr-4"></i></a>
+                        }
+                        else if (item.isFavorite == true)
+                        {
+                            <a asp-action="RemoveFromFavorite" asp-route-applicationUserId="@item.ApplicationUserId" asp-route-sampleId="@item.Id"><i class="fas fa-1x fa-star text-warning mr-4"></i></a>
+                        }
+                        else
+                        {
+                            <a asp-action="AddToFavorite" asp-route-applicationUserId="@item.ApplicationUserId" asp-route-sampleId="@item.Id"><i class="far fa-1x fa-star text-warning mr-4"></i></a>
+                        }
 
-                    <a asp-action="AddToFavorite" asp-route-applicationUserId="@item.ApplicationUserId" asp-route-sampleId="@item.Id"><i class="far fa-1x fa-star text-warning mr-4"></i></a>
-
-                </td>
-            </tr>
+                    </td>
+                </tr>
             }
 
         </tbody>
@@ -97,13 +107,13 @@ else
 }
 <br />
 <div class="d-flex justify-content-center fixed-bottom">
-    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    Page @(Model.Sample.PageCount < Model.Sample.PageNumber ? 0 : Model.Sample.PageNumber) of @Model.Sample.PageCount
 
     <nav aria-label="Page navigation example">
         <div class="pagination">
-            @if (Model.PageCount != 0)
+            @if (Model.Sample.PageCount != 0)
             {
-                @for (var i = 0; i < Model.PageCount; i++)
+                @for (var i = 0; i < Model.Sample.PageCount; i++)
                 {
                     <h5 class="page-item pl-2"><a class="page-link" href="?page=@(i + 1)">@(i + 1)</a></h5>
                 }
