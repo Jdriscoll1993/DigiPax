@@ -16,7 +16,6 @@ document.getElementById("add-sample").addEventListener("click", function () {
     newSampleLabel.setAttribute("id", "name-label");
     newSampleLabel.setAttribute("for", "Sample" + count);
 
-    newSampleLabel.innerHTML = "Name";
 
     newSampleInput.setAttribute("class", "form-control");
     newSampleInput.setAttribute("id", "name-select");
@@ -33,7 +32,7 @@ document.getElementById("add-sample").addEventListener("click", function () {
     rowDiv.setAttribute("class", "row");
 
     var sampleDiv = document.createElement("div");
-    sampleDiv.setAttribute("class", "col-md-6");
+    sampleDiv.setAttribute("class", "col-xl-12");
 
     sampleDiv.append(newSampleLabel);
     sampleDiv.append(newSampleInput);

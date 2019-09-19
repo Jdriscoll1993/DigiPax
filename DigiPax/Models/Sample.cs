@@ -35,6 +35,8 @@ namespace DigiPax.Models
         public int MusicKeyId { get; set; }
         public MusicKey MusicKey { get; set; }
 
+        
+        [Range(0, 300)]
         public int BPM { get; set; }
 
         public bool? isFavorite { get; set; }
