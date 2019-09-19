@@ -262,7 +262,7 @@ namespace DigiPax.Controllers
             var favorite = new Favorite();
             ApplicationUser user = await GetCurrentUserAsync();
             _context.Favorite.RemoveRange(_context.Favorite
-                .Where(fav => favorite.ApplicationUserId == user.Id && favorite.SampleId == sampleId));
+                .Where(fav => fav.ApplicationUserId == user.Id && fav.SampleId == sampleId));
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
