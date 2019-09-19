@@ -2,31 +2,26 @@
 
 @{
     ViewData["Title"] = "Packs";
+<a class="float-left" asp-action="Create"><i class="far fa-2x fa-plus-square"></i></a>
 }
-
-<h1>Packs</h1>
-
-<p>
-    <a asp-action="Create">Create A Pack</a>
-</p>
-<table>
+<h4 class="text-center display-4 text-white">Packs</h4>
+<hr />
+<h3 class="display-4 text-warning">My Packs</h3>
+<h6>Your packs are displayed here...</h6>
+<table class="d-flex table-striped">
     <thead>
-        <tr>
-            <th>
-                <strong>My Packs</strong><hr />
-            </th>
-            <th></th>
-        </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
+            <tr class="mb-3" style="width: 18rem">
+                <td class="fa-2x">
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </a>
                 </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50"></i></a> |
+                <td class="pl-5 d-flex flex-nowrap">
+                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50 pr-3"></i></a>  
                     <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-1x fa-minus-circle text-danger"></i></a>
                 </td>
             </tr>

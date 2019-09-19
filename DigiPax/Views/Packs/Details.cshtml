@@ -1,4 +1,4 @@
-﻿@model DigiPax.Models.Pack
+﻿@model DigiPax.Models.ViewModels.PackDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,10 +11,10 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Pack.Title)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Pack.Title)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.PackSamples)
@@ -22,12 +22,12 @@
         @foreach (var item in Model.PackSamples)
         {
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PackSamples)
+            @Html.DisplayFor(modelItem => item.SampleName)
         </dd>
         }
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Pack.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

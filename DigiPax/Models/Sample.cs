@@ -37,6 +37,8 @@ namespace DigiPax.Models
 
         public int BPM { get; set; }
 
+        public bool? isFavorite { get; set; }
+
         public ICollection<PackSample> PackSamples { get; set; }
 
 
