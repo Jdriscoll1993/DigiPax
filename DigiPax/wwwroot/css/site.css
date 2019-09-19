@@ -21,6 +21,10 @@ html {
 
 .myTable {
     margin: auto;
+    width: auto;
+}
+.centerThis {
+    margin: auto;
 }
 
 .border-top {
