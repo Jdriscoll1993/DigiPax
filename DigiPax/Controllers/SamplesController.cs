@@ -122,21 +122,11 @@ namespace DigiPax.Controllers
 
             var favs = _context.Favorite.Where(favorite => listIds.Contains(favorite.SampleId) && (favorite.ApplicationUserId == user.Id)).ToList();
 
-            //favs.ForEach(f =>
-            //{
-            //    if (f.ApplicationUserId == user.Id)
-            //    {
-            //        filteredFavs.Add(f);
-            //    };
-            //});
-
-
             sampleList.ForEach(samp =>
             {
                 samp.isFavorite = favs.Any(f => f.SampleId == samp.Id);
 
             });
-
 
             int pageSize = 5;
             int pageNumber = (page ?? 1);
@@ -145,7 +135,6 @@ namespace DigiPax.Controllers
             return View(viewModel);
 
         }
-
 
         // GET: Samples/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -168,7 +157,6 @@ namespace DigiPax.Controllers
             return View(sample);
         }
 
-
         [Authorize]
         // GET: Samples/Create
         [HttpGet]
@@ -178,7 +166,6 @@ namespace DigiPax.Controllers
             viewModel.MusicKeys = new SelectList(await _context.MusicKey.ToListAsync(), "Id", "Name");
             viewModel.Genres = new SelectList(await _context.Genre.ToListAsync(), "Id", "Name");
             viewModel.SampleTypes = new SelectList(await _context.SampleType.ToListAsync(), "Id", "Name");
-
 
             return View(viewModel);
         }
@@ -192,7 +179,6 @@ namespace DigiPax.Controllers
         {
             if (file != null)
             {
-
 
                 var path = Path.Combine(
                       Directory.GetCurrentDirectory(), "wwwroot",
@@ -229,7 +215,6 @@ namespace DigiPax.Controllers
                 return View(viewModel);
             }
         }
-
 
         //[HttpGet("{applicationUserId}/{sampleId}")]
         public async Task<IActionResult> AddToFavorite(int sampleId)
@@ -376,24 +361,5 @@ namespace DigiPax.Controllers
             }
             return View(await applicationDbContext.ToListAsync());
         }
-
-        //// GET: UserSamples
-        //public async Task<IActionResult> MySamples()
-        //{
-        //    var samples = await _context.Sample
-        //        .Where(s => s.ApplicationUserId == _userManager.GetUserId(User))
-        //        .Include(s => s.Key)
-        //        .Include(s => s.SampleType)
-        //        .Include(s => s.Genre)
-        //        .ToListAsync();
-
-        //    var mySamples = samples.Select(sample => new SampleCreateViewModel()
-        //    {
-        //        Sample = sample,
-        //    }).ToList();
-
-
-        //    return View();
-        //}
     }
 }

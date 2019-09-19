@@ -26,8 +26,7 @@ namespace DigiPax.Data
         public DbSet<SampleType> SampleType { get; set; }
 
         // seed data:
-
-        //user
+        //USER
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Genre>()
@@ -41,17 +40,6 @@ namespace DigiPax.Data
                  .WithMany(g => g.Samples)
                  .HasForeignKey(s => s.GenreId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-        //    modelBuilder.Entity<PackSample>()
-        //.HasKey(bc => new { bc.PackId, bc.SampleId });
-        //    modelBuilder.Entity<PackSample>()
-        //        .HasOne(bc => bc.Pack)
-        //        .WithMany(b => b.PackSamples)
-        //        .HasForeignKey(bc => bc.PackId);
-        //    modelBuilder.Entity<PackSample>()
-        //        .HasOne(bc => bc.Sample)
-        //        .WithMany(c => c.PackSamples)
-        //        .HasForeignKey(bc => bc.SampleId);
 
             base.OnModelCreating(modelBuilder);
             ApplicationUser user = new ApplicationUser
@@ -70,7 +58,6 @@ namespace DigiPax.Data
             var passwordHash = new PasswordHasher<ApplicationUser>();
             user.PasswordHash = passwordHash.HashPassword(user, "Password");
             modelBuilder.Entity<ApplicationUser>().HasData(user);
-
 
             //GENRE
             modelBuilder.Entity<Genre>().HasData(

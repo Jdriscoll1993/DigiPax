@@ -9,6 +9,5 @@ namespace DigiPax.Models.ViewModels
     {
         public IEnumerable<Favorite> Favorites { get; set; }
         public IEnumerable<Sample> Samples { get; set; }
-        public Sample Sample { get; set; }
     }
 }

@@ -8,53 +8,48 @@
 
 <hr />
 <div class="col-6">
-<h3 class="display-4 text-warning row">My Favorites</h3>
-<h6>Your favorited samples from the pool are displayed here...</h6>
-<table class="col">
-    <thead>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Favorites)
-        {
-            @if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
+    <h3 class="display-4 text-warning row">My Favorites</h3>
+    <h6>Your favorited samples from the pool are displayed here...</h6>
+    <table class="col">
+        <thead>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Favorites)
+            {
+                @if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
+                {
+                    <tr>
+                        <td class="pr-3 fa-2x">
+                            @Html.DisplayFor(modelItem => item.Sample.SampleName)
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50 pr-3"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-1x fa-minus-circle text-danger"></i></a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <hr />
+    <h3 class="display-4 text-warning row">My Samples</h3>
+    <h6>Samples you upload to the pool are displayed here...</h6>
+    <table class="col">
+        <thead>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Samples)
             {
                 <tr>
                     <td class="pr-3 fa-2x">
-                        @Html.DisplayFor(modelItem => item.Sample.SampleName)
+                        @Html.DisplayFor(modelItem => item.SampleName)
                     </td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50 pr-3"></i></a>
-                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-1x fa-minus-circle text-danger"></i></a>
+                        <a asp-controller="Samples" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50"></i></a>
                     </td>
                 </tr>
             }
-        }
-    </tbody>
-</table>
-
-<hr />
-<h3 class="display-4 text-warning row">My Samples</h3>
-
-    <h6>Samples you upload to the pool are displayed here...</h6>
-
-<table class="col">
-    <thead>
-
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Samples)
-        {
-            <tr>
-                <td class="pr-3 fa-2x">
-                    @Html.DisplayFor(modelItem => item.SampleName)
-                </td>
-                <td>
-                    <a asp-controller="Samples" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50"></i></a>
-                </td>
-            </tr>
-
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
 </div>
 <hr />

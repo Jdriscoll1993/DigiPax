@@ -10,45 +10,6 @@
 <div>
     <h4>Sample</h4>
     <hr />
-    @*<dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SampleName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SampleName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SamplePath)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SamplePath)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ApplicationUserId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ApplicationUserId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SampleTypeId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SampleTypeId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Genre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Genre.Id)
-        </dd class>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MusicKey)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MusicKey.Id)
-        </dd class>
-    </dl>*@
-    
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
