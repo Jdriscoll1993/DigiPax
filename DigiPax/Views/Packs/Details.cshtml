@@ -4,26 +4,23 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1 class="display-4 text-primary">
+    @Html.DisplayFor(model => model.Pack.Title)
+</h1>
 
 <div>
-    <h4>Pack</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Pack.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Pack.Title)
-        </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2 text-white">
             @Html.DisplayNameFor(model => model.PackSamples)
         </dt>
+    </dl>
+    <dl class="row">
         @foreach (var item in Model.PackSamples)
         {
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(modelItem => item.SampleName)
-        </dd>
+            <dd class="col-sm-10 text-warning">
+                @Html.DisplayFor(modelItem => item.SampleName)
+            </dd>
         }
     </dl>
 </div>

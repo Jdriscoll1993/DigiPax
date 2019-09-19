@@ -6,9 +6,11 @@
 
 <h4 class="text-center display-4 text-white">Collection</></h4>
 
-<hr /><h3 class="display-4 text-warning">My Favorites</h3>
-<h6>Your favorited samples from the pool will be displayed here...</h6>
-<table>
+<hr />
+<div class="col-6">
+<h3 class="display-4 text-warning row">My Favorites</h3>
+<h6>Your favorited samples from the pool are be displayed here...</h6>
+<table class="col">
     <thead>
     </thead>
     <tbody>
@@ -21,7 +23,7 @@
                         @Html.DisplayFor(modelItem => item.Sample.SampleName)
                     </td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50"></i></a> |
+                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50 pr-3"></i></a>
                         <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-1x fa-minus-circle text-danger"></i></a>
                     </td>
                 </tr>
@@ -30,9 +32,12 @@
     </tbody>
 </table>
 
-<hr /><h3 class="display-4 text-warning">My Samples</h3>
-      <h6>Samples you upload to the pool will be displayed here...</h6>
-<table>
+<hr />
+<h3 class="display-4 text-warning row">My Samples</h3>
+
+    <h6>Samples you upload to the pool are be displayed here...</h6>
+
+<table class="col">
     <thead>
 
     </thead>
@@ -51,4 +56,5 @@
         }
     </tbody>
 </table>
+</div>
 <hr />
