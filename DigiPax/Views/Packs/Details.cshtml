@@ -1,5 +1,7 @@
-﻿@model DigiPax.Models.ViewModels.PackDetailsViewModel
+﻿@inject UserManager<ApplicationUser> UserManager
+@using Microsoft.AspNetCore.Identity
 
+@model DigiPax.Models.ViewModels.PackDetailsViewModel
 @{
     ViewData["Title"] = "Details";
 }
@@ -25,6 +27,8 @@
     </div>
 </div>
 <div>
-    @*<a asp-action="Edit" asp-route-id="@Model.Pack.Id">Edit</a> |*@
+    <hr/>
+    @*<a asp-action="Edit" asp-route-id="@Model.Pack.Id">Edit Pack Title</a>*@
+    <br />
     <a asp-action="Index"><i class="fa fa-2x fa-fast-backward"></i></a>
 </div>
