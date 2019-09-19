@@ -259,17 +259,11 @@ namespace DigiPax.Controllers
 
         public async Task<IActionResult> RemoveFromFavorite(int sampleId)
         {
-            // create a new record of favorite
             var favorite = new Favorite();
-            // grab the current user and assign it to a variable
             ApplicationUser user = await GetCurrentUserAsync();
-            // initiate the value of properties
-            favorite.SampleId = sampleId;
-            favorite.ApplicationUser = user;
-            // saving the record to the database asynchronosly 
-            await _context.Favorite.AddAsync(favorite);
+            _context.Favorite.RemoveRange(_context.Favorite
+                .Where(fav => favorite.ApplicationUserId == user.Id && favorite.SampleId == sampleId));
             await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
         }
 

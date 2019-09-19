@@ -87,7 +87,7 @@
                         }
                         else if (item.isFavorite == true)
                         {
-                            <a asp-action="AddToFavorite" asp-route-applicationUserId="@item.ApplicationUserId" asp-route-sampleId="@item.Id"><i class="fas fa-1x fa-minus-circle text-warning mr-4"></i></a>
+                            <a asp-action="RemoveFromFavorite" asp-route-applicationUserId="@item.ApplicationUserId" asp-route-sampleId="@item.Id"><i class="fas fa-1x fa-minus-circle text-warning mr-4"></i></a>
                         }
                         else
                         {
