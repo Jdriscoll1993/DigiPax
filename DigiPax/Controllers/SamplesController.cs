@@ -147,7 +147,7 @@ namespace DigiPax.Controllers
             });
 
 
-            int pageSize = 1;
+            int pageSize = 5;
             int pageNumber = (page ?? 1);
             var viewModel = new MainSampleListViewModel();
             viewModel.Sample = (sampleList.ToPagedList(pageNumber, pageSize));
