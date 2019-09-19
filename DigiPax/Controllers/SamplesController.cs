@@ -98,7 +98,7 @@ namespace DigiPax.Controllers
                     break;
                 default:
                     samples = samples.OrderBy(s => s.SampleName);
-                        break;
+                    break;
             }
             var applicationDbContext = samples;
 
@@ -120,29 +120,20 @@ namespace DigiPax.Controllers
 
             var filteredFavs = new List<Favorite>();
 
-            var favs = _context.Favorite.Where(favorite => listIds.Contains(favorite.SampleId)).ToList();
+            var favs = _context.Favorite.Where(favorite => listIds.Contains(favorite.SampleId) && (favorite.ApplicationUserId == user.Id)).ToList();
 
-            favs.ForEach(f =>
-            {
-                if (f.ApplicationUserId == user.Id)
-                {
-                    filteredFavs.Add(f);
-                };
-            });
+            //favs.ForEach(f =>
+            //{
+            //    if (f.ApplicationUserId == user.Id)
+            //    {
+            //        filteredFavs.Add(f);
+            //    };
+            //});
 
 
             sampleList.ForEach(samp =>
             {
-                filteredFavs.ForEach(fav =>
-                {
-                    if (fav.SampleId == samp.Id)
-                    {
-                        samp.isFavorite = true;
-                    } else
-                    {
-                        samp.isFavorite = false;
-                    }
-                });
+                samp.isFavorite = favs.Any(f => f.SampleId == samp.Id);
 
             });
 
@@ -243,16 +234,21 @@ namespace DigiPax.Controllers
         //[HttpGet("{applicationUserId}/{sampleId}")]
         public async Task<IActionResult> AddToFavorite(int sampleId)
         {
-            // create a new record of favorite
-            var favorite = new Favorite();
-            // grab the current user and assign it to a variable
             ApplicationUser user = await GetCurrentUserAsync();
-            // initiate the value of properties
-            favorite.SampleId = sampleId;
-            favorite.ApplicationUser = user;
-            // saving the record to the database asynchronosly 
-            await _context.Favorite.AddAsync(favorite);
-            await _context.SaveChangesAsync();
+            var addFav = await _context.Favorite
+                .FirstOrDefaultAsync(fav => fav.ApplicationUserId == user.Id && fav.SampleId == sampleId);
+            if (addFav == null)
+            {
+                // create a new record of favorite
+                var favorite = new Favorite();
+                // grab the current user and assign it to a variable
+                // initiate the value of properties
+                favorite.SampleId = sampleId;
+                favorite.ApplicationUser = user;
+                // saving the record to the database asynchronosly 
+                await _context.Favorite.AddAsync(favorite);
+                await _context.SaveChangesAsync();
+            }
 
             return RedirectToAction(nameof(Index));
         }
@@ -261,9 +257,13 @@ namespace DigiPax.Controllers
         {
             var favorite = new Favorite();
             ApplicationUser user = await GetCurrentUserAsync();
-            _context.Favorite.RemoveRange(_context.Favorite
-                .Where(fav => fav.ApplicationUserId == user.Id && fav.SampleId == sampleId));
-            await _context.SaveChangesAsync();
+            var removeFav = await _context.Favorite
+                .FirstOrDefaultAsync(fav => fav.ApplicationUserId == user.Id && fav.SampleId == sampleId);
+            if (removeFav != null)
+            {
+                _context.Favorite.Remove(removeFav);
+                await _context.SaveChangesAsync();
+            }
             return RedirectToAction(nameof(Index));
         }
 

@@ -41,12 +41,4 @@ document.getElementById("add-sample").addEventListener("click", function () {
     rowDiv.append(sampleDiv);
 
     formContainer.append(formGroupDiv);
-
-
-    ////opt is type NodeList
-    //var opt = document.querySelectorAll("option");
-    //var select = document.querySelector("#name-select");
-    ////foreach over options => o append select
-
-
 });
