@@ -5,47 +5,62 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="d-flex">
+    <h1 class="d-flex justify-content-lg-center text-warning">Your Uploaded Sample:</h1>
+    <h1 class="d-flex justify-content-lg-center text-primary pl-2">
+        @Html.DisplayFor(model => model.SampleName)
+    </h1>
+</div>
+<div class="d-flex">
+    <h5 class="d-flex justify-content-lg-center text-warning">
+        @Html.DisplayNameFor(model => model.Genre):
+    </h5>
+    <h5 class="d-flex justify-content-lg-center text-primar pl-2">
+        @Html.DisplayFor(model => model.Genre.Name)
+    </h5>
+</div>
 
+
+
+<hr />
 <div>
-    <h4>Favorite</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 text-primary">
             @Html.DisplayNameFor(model => model.SampleName)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-10 text-warning">
             @Html.DisplayFor(model => model.SampleName)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 text-primary">
             @Html.DisplayNameFor(model => model.SampleType)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-10 text-warning">
             @Html.DisplayFor(model => model.SampleType.Name)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 text-primary">
             @Html.DisplayNameFor(model => model.Genre)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-10 text-warning">
             @Html.DisplayFor(model => model.Genre.Name)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 text-primary">
             @Html.DisplayNameFor(model => model.MusicKey)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-10 text-warning">
             @Html.DisplayFor(model => model.MusicKey.Name)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 text-primary ">
             @Html.DisplayNameFor(model => model.BPM)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-10 text-warning">
             @Html.DisplayFor(model => model.BPM)
         </dd>
     </dl>
 </div>
 <div>
     <hr />
-    <a asp-action="Index">Back to Pool</a>
+    <a class="text-white" asp-action="Index">Pool</a>
     <br />
     <br />
     <a asp-controller="Favorites" asp-action="Index"><i class="fa fa-2x fa-fast-backward"></i></a>

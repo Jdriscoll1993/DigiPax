@@ -4,12 +4,17 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Add a Sample</h1>
+    <div class="d-flex">
+        <h1 class="text-warning pr-2">Add a sample</h1>
 
-<h4>To The Pool</h4>
+        <h1 class="text-primary">to the pool</h1>
+        <h1 class="text-warning pr-2">.</h1>
+
+
+    </div>
 <hr />
 <div>
-    <div>
+    <div class="text-warning">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div>
@@ -50,7 +55,7 @@
 </div>
 
 <div>
-    <a asp-action="Index"><i class="fas fa-2x text-warning fa-arrow-left"></i></a>
+    <a asp-action="Index"><i class="fas fa-2x text-warning fa-fast-backward"></i></a>
 </div>
 
 @section Scripts {

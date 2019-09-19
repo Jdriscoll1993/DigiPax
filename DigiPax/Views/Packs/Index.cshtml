@@ -1,30 +1,40 @@
 ﻿@model IEnumerable<DigiPax.Models.Pack>
+@using Microsoft.AspNetCore.Identity
 
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Packs";
-<a class="float-left" asp-action="Create"><i class="far fa-2x fa-plus-square"></i></a>
 }
-<h4 class="text-center display-4 text-white">Packs</h4>
-<hr />
-<h3 class="display-4 text-warning">My Packs</h3>
-<h6>Your packs are displayed here...</h6>
-<table class="d-flex table-striped">
-    <thead>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr class="mb-3" style="width: 18rem">
-                <td class="fa-2x">
-                    <a asp-action="Details" asp-route-id="@item.Id">
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </a>
-                </td>
-                <td class="pl-5 d-flex flex-nowrap">
-                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50 pr-3"></i></a>  
-                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-1x fa-minus-circle text-danger"></i></a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <div class="d-flex justify-content-center">
+            <h4 class="text-center display-4 text-white pr-5 ">Packs</h4>
+            <a class="" asp-action="Create"><i class="far fa-3x fa-plus-square mt-3"></i></a>
+        </div>
+
+        <hr />
+    <div class="">
+        <h3 class="display-4 text-warning">Public Packs</h3>
+        <h6>All user created packs are displayed here...</h6>
+        <table class="d-flex table-striped">
+            <thead>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="mb-3" style="width: 18rem">
+                        <td class="fa-2x">
+                            <a asp-action="Details" asp-route-id="@item.Id">
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </a>
+                        </td>
+                        <td class="pl-5 d-flex flex-nowrap">
+                            <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle text-white-50 pr-3"></i></a>
+                            @if (UserManager.GetUserAsync(User).Result.Id == item.ApplicationUserId)
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-1x fa-minus-circle text-danger"></i></a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>

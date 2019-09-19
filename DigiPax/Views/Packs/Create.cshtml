@@ -4,9 +4,9 @@
     ViewData["Title"] = "Create";
 }
 
-<h1 class="text-warning">Create</h1>
+<h1 class="text-warning">Create a new public Pack</h1>
 
-<h4 class="text-primary">Pack</h4>
+<h4 class="text-primary">Add up to 16 samples!</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -20,7 +20,7 @@
             @for (var i = 0; i < Model.SampleIds.Count; i++)
             {
                 <div class="form-group sample-item">
-                    <label asp-for="SampleIds[i]" class="control-label" id="name-label"></label>
+                    <h6 class="text-warning">Pack Samples:</h6>
                     <select asp-for="SampleIds[i]" asp-items="ViewBag.Samples" class="form-control" id="name-select"></select>
                     <span asp-validation-for="SampleIds[i]" class="text-danger" id="name-span"></span>
                 </div>
