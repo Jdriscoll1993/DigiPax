@@ -5,8 +5,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DigiPax.Models
 {
+    // Implement IdentityUser
     public class ApplicationUser : IdentityUser
     {
+        //Users are prompted to login with Screen Name instead of default option of Email
         [Required]
         [Display(Name = "Screen Name")]
         public string ScreenName { get; set; }
