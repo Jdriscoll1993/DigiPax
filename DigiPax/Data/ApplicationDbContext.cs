@@ -16,6 +16,7 @@ namespace DigiPax.Data
 
         }
         //Models being mapped to database
+        // Core of Entity 
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<Favorite> Favorite { get; set; }
         public DbSet<Sample> Sample { get; set; }

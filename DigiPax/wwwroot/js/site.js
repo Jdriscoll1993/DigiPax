@@ -2,6 +2,8 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+// dynamically populate dropdown fields in pack creation.
 var formInput = document.getElementsByClassName("form-row");
 
 document.getElementById("add-sample").addEventListener("click", function () {
