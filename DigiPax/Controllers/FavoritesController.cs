@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,21 +10,26 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DigiPax.Controllers
 {
+    // Inherit from base class for MVC Controller
     public class FavoritesController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
+        //Constructor takes in references to the database and to the user and initializes their values
         public FavoritesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
+        //Handy reusable method to get the current user
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
+        // CRUD OPERATONS ON FAVORITES
+
 
         // GET: Favorites
         public async Task<IActionResult> Index()
-
         {
             var viewModel = new FavoriteListViewModel();
             var user = await GetCurrentUserAsync();
@@ -42,22 +45,19 @@ namespace DigiPax.Controllers
             {
                 return NotFound();
             }
-
             var favorite = await _context.Favorite
                 .Include(f => f.Sample)
                 .Include(f => f.Sample.MusicKey)
                 .Include(f => f.Sample.SampleType)
                 .Include(f => f.Sample.Genre)
-
-
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (favorite == null)
             {
                 return NotFound();
             }
-
             return View(favorite.Sample);
         }
+
 
         // GET: Favorites/Create
         public IActionResult Create()
@@ -67,8 +67,6 @@ namespace DigiPax.Controllers
         }
 
         // POST: Favorites/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,UserId,SampleId")] Favorite favorite)
@@ -83,6 +81,7 @@ namespace DigiPax.Controllers
             return View(favorite);
         }
 
+
         // GET: Favorites/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -90,7 +89,6 @@ namespace DigiPax.Controllers
             {
                 return NotFound();
             }
-
             var favorite = await _context.Favorite.FindAsync(id);
             if (favorite == null)
             {
@@ -111,7 +109,6 @@ namespace DigiPax.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
@@ -136,6 +133,7 @@ namespace DigiPax.Controllers
             return View(favorite);
         }
 
+
         // GET: Favorites/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -143,7 +141,6 @@ namespace DigiPax.Controllers
             {
                 return NotFound();
             }
-
             var favorite = await _context.Favorite
                 .Include(f => f.Sample)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -151,7 +148,6 @@ namespace DigiPax.Controllers
             {
                 return NotFound();
             }
-
             return View(favorite);
         }
 
@@ -166,6 +162,11 @@ namespace DigiPax.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        // ADDITIONAL METHODS
+
+
+        // private method used in Favorites/Edit to check against already favorited samples
         private bool FavoriteExists(int id)
         {
             return _context.Favorite.Any(e => e.Id == id);

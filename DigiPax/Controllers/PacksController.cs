@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,9 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using DigiPax.Data;
 using DigiPax.Models;
 using DigiPax.Models.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using System.Collections.ObjectModel;
 
 namespace DigiPax.Controllers
 {
@@ -25,6 +22,8 @@ namespace DigiPax.Controllers
             _userManager = userManager;
         }
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        
+        // CRUD Functionality
 
         // GET: Packs
         public async Task<IActionResult> Index()
@@ -36,7 +35,6 @@ namespace DigiPax.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             var viewModel = new PackDetailsViewModel();
-
             if (id == null)
             {
                 return NotFound();
@@ -44,25 +42,21 @@ namespace DigiPax.Controllers
             var pack = await _context.Pack
                 .Include(m => m.PackSamples)
                 .FirstOrDefaultAsync(m => m.Id == id);
-
             if (pack == null)
             {
                 return NotFound();
             }
-
             viewModel.Pack = pack;
             var packSampleList = pack.PackSamples.ToList<PackSample>();
             var idList = new List<int?>();
-
             packSampleList.ForEach(ps =>
             {
                 idList.Add(ps.SampleId);
             });
-
             viewModel.PackSamples = _context.Sample.Where(s => idList.Contains(s.Id)).ToList();
-
             return View(viewModel);
         }
+
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -71,15 +65,11 @@ namespace DigiPax.Controllers
             {
                 0
             };
-
-
             ViewData["Samples"] = new SelectList(await _context.Sample.ToListAsync(), "Id", "SampleName");
-
             return View(viewModel);
         }
+
         // POST: Packs/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PackCreateViewModel viewModel)
@@ -100,7 +90,6 @@ namespace DigiPax.Controllers
                     SampleId = id,
                 });
                 _context.PackSample.AddRange(samplePacks);
-
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -114,7 +103,6 @@ namespace DigiPax.Controllers
             {
                 return NotFound();
             }
-
             var pack = await _context.Pack.FindAsync(id);
             if (pack == null)
             {
@@ -124,8 +112,6 @@ namespace DigiPax.Controllers
         }
 
         // POST: Packs/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,UserId")] Pack pack)
@@ -134,7 +120,6 @@ namespace DigiPax.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
@@ -165,7 +150,6 @@ namespace DigiPax.Controllers
             {
                 return NotFound();
             }
-
             var pack = await _context.Pack
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pack == null)
@@ -186,6 +170,10 @@ namespace DigiPax.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
+        //ADDITIONAL METHODS
+
 
         private bool PackExists(int id)
         {

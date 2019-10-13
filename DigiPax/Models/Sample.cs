@@ -1,9 +1,6 @@
-﻿using DigiPax.Data;
-using System;
+﻿
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DigiPax.Models
 {
@@ -35,12 +32,9 @@ namespace DigiPax.Models
         public int MusicKeyId { get; set; }
         public MusicKey MusicKey { get; set; }
 
-        
         [Range(0, 300)]
         public int BPM { get; set; }
-
         public bool? isFavorite { get; set; }
-
         public ICollection<PackSample> PackSamples { get; set; }
 
 

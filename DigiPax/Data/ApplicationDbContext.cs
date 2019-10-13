@@ -30,12 +30,15 @@ namespace DigiPax.Data
         //USER
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //delete behaviors: Restrict, Cascade, SetNutll
+            //delete behavior for <Genre>()
             modelBuilder.Entity<Genre>()
                 .HasMany(g => g.Samples)
                 .WithOne(s => s.Genre)
                 .HasForeignKey(s => s.GenreId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            //delete behavior for <Sample>()
             modelBuilder.Entity<Sample>()
                  .HasOne(s => s.Genre)
                  .WithMany(g => g.Samples)
