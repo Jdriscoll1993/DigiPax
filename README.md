@@ -28,17 +28,8 @@ I created a full stack ASP.NET Core application that utilizes MVC design pattern
 
 > Users may create packs of samples by combining up to 16 samples in a single pack. All users can see all packs, as they are all public in this version of the application. In a future version, users will be able to create private packs, and download a pack of samples as a single download.
 
-### Entity Relationship Diagram of the database I created:
-
-![DigiPax ERD](./wwwroot/img/ERD.png)
-
-### Original mockup concepts for Mic Locker
-
-![DigiPax Landing Page](./src/img/LandingPage.png)
-![DigiPax Sample Pool](./src/img/SamplePool.png)
-![DigiPax Sample Upload](./src/img/SampleUpload.png)
-
-
+### Entity Relationship Diagram of my database:
+[ERD](https://dbdiagram.io/d/5d711b8b83427516dc0b5f53)
 
 ### Contributor:
 
