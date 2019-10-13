@@ -9,6 +9,8 @@ I created a full stack ASP.NET Core application that utilizes MVC design pattern
 3. [C#](https://docs.microsoft.com/en-us/dotnet/csharp/): Core application functionality
 4. [JavaScript](https://www.javascript.com/): Used to dynamically populate drop drown fields in the pack creation form
 5. [Bootstrap4](https://getbootstrap.com/): Core application styling
+6. [Font Awesome](https://fontawesome.com/): Cool Icons
+7. [X.PagedList.Mvc.Core](https://www.nuget.org/packages/X.PagedList.Mvc.Core/): Pagination
 
 ### Final Result:
 
@@ -32,5 +34,7 @@ I created a full stack ASP.NET Core application that utilizes MVC design pattern
 [ERD](https://dbdiagram.io/d/5d711b8b83427516dc0b5f53)
 
 ### Contributor:
-
 [Joey Driscoll](https://github.com/Jdriscoll1993)
+This is the first full stack MVC application I've ever built. I look forward to the continuation of the project and am planning future versions with a few things in mind:
+> A smoother user experience
+> Implementation of new features such as downloading a pack (multiple files compressed into a folder and downloaded)
