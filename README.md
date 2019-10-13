@@ -38,5 +38,7 @@ I created a full stack ASP.NET Core application that utilizes MVC design pattern
 
 #### Note From The Contributor:
 Thank you for exploring my application! This is the first full stack MVC application I've ever built. I look forward to the continuation of the project and am planning future versions with a few things in mind:
+
 > A smoother user experience
+
 > Implementation of new features such as downloading a pack (multiple files compressed into a folder and downloaded)
