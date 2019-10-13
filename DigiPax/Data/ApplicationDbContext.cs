@@ -4,18 +4,18 @@ using System.Text;
 using DigiPax.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using DigiPax.Models.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace DigiPax.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
         }
+        //Models being mapped to database
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<Favorite> Favorite { get; set; }
         public DbSet<Sample> Sample { get; set; }
