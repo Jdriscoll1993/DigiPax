@@ -28,11 +28,13 @@ namespace DigiPax.Controllers
         }
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
+        //CRUD Functionality:
+
         // GET: Samples
+        // Pagintation, Column Sorting ASC or DESC, and Search by title are all featured in the sample pool
         public async Task<IActionResult> Index(string searchString, string sortOrder, string currentFilter, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
-
             ViewBag.SampleNameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "Name";
             ViewBag.GenreSortParm = sortOrder == "Genre" ? "genre_desc" : "Genre";
             ViewBag.BPMSortParm = sortOrder == "BPM" ? "bpm_desc" : "BPM";
@@ -48,9 +50,7 @@ namespace DigiPax.Controllers
             {
                 searchString = currentFilter;
             }
-
             ViewBag.CurrentFilter = searchString;
-
             var samples = from s in _context.Sample
                           .Include(s => s.Genre)
                           .Include(s => s.SampleType)
@@ -101,39 +101,28 @@ namespace DigiPax.Controllers
                     break;
             }
             var applicationDbContext = samples;
-
             if (!String.IsNullOrEmpty(searchString))
             {
                 samples = samples.Where(s => s.SampleName.Contains(searchString));
             }
-
             var listIds = new List<int?>();
-
             var sampleList = samples.ToList();
-
             sampleList.ForEach(s =>
             {
                 listIds.Add(s.Id);
             });
-
             ApplicationUser user = await GetCurrentUserAsync();
-
             var filteredFavs = new List<Favorite>();
-
             var favs = _context.Favorite.Where(favorite => listIds.Contains(favorite.SampleId) && (favorite.ApplicationUserId == user.Id)).ToList();
-
             sampleList.ForEach(samp =>
             {
                 samp.isFavorite = favs.Any(f => f.SampleId == samp.Id);
-
             });
-
             int pageSize = 5;
             int pageNumber = (page ?? 1);
             var viewModel = new MainSampleListViewModel();
             viewModel.Sample = (sampleList.ToPagedList(pageNumber, pageSize));
             return View(viewModel);
-
         }
 
         // GET: Samples/Details/5
@@ -143,7 +132,6 @@ namespace DigiPax.Controllers
             {
                 return NotFound();
             }
-
             var sample = await _context.Sample
                 .Include(s => s.Genre)
                 .Include(s => s.SampleType)
@@ -153,7 +141,6 @@ namespace DigiPax.Controllers
             {
                 return NotFound();
             }
-
             return View(sample);
         }
 
@@ -166,7 +153,6 @@ namespace DigiPax.Controllers
             viewModel.MusicKeys = new SelectList(await _context.MusicKey.ToListAsync(), "Id", "Name");
             viewModel.Genres = new SelectList(await _context.Genre.ToListAsync(), "Id", "Name");
             viewModel.SampleTypes = new SelectList(await _context.SampleType.ToListAsync(), "Id", "Name");
-
             return View(viewModel);
         }
 
@@ -179,16 +165,13 @@ namespace DigiPax.Controllers
         {
             if (file != null)
             {
-
                 var path = Path.Combine(
                       Directory.GetCurrentDirectory(), "wwwroot",
                       "AudioFiles", file.FileName);
-
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
                 }
-
                 ApplicationUser user = await GetCurrentUserAsync();
                 sample.ApplicationUserId = user.Id;
                 sample.SamplePath = "AudioFiles/" + file.FileName;
@@ -214,42 +197,6 @@ namespace DigiPax.Controllers
                 viewModel.SampleTypes = new SelectList(await _context.SampleType.ToListAsync(), "Id", "Name");
                 return View(viewModel);
             }
-        }
-
-        //[HttpGet("{applicationUserId}/{sampleId}")]
-        public async Task<IActionResult> AddToFavorite(int sampleId)
-        {
-            ApplicationUser user = await GetCurrentUserAsync();
-            var addFav = await _context.Favorite
-                .FirstOrDefaultAsync(fav => fav.ApplicationUserId == user.Id && fav.SampleId == sampleId);
-            if (addFav == null)
-            {
-                // create a new record of favorite
-                var favorite = new Favorite();
-                // grab the current user and assign it to a variable
-                // initiate the value of properties
-                favorite.SampleId = sampleId;
-                favorite.ApplicationUser = user;
-                // saving the record to the database asynchronosly 
-                await _context.Favorite.AddAsync(favorite);
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> RemoveFromFavorite(int sampleId)
-        {
-            var favorite = new Favorite();
-            ApplicationUser user = await GetCurrentUserAsync();
-            var removeFav = await _context.Favorite
-                .FirstOrDefaultAsync(fav => fav.ApplicationUserId == user.Id && fav.SampleId == sampleId);
-            if (removeFav != null)
-            {
-                _context.Favorite.Remove(removeFav);
-                await _context.SaveChangesAsync();
-            }
-            return RedirectToAction(nameof(Index));
         }
 
         // GET: Samples/Edit/5
@@ -281,7 +228,6 @@ namespace DigiPax.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
@@ -314,7 +260,6 @@ namespace DigiPax.Controllers
             {
                 return NotFound();
             }
-
             var sample = await _context.Sample
                 .Include(s => s.Genre)
                 .Include(s => s.MusicKey)
@@ -323,7 +268,6 @@ namespace DigiPax.Controllers
             {
                 return NotFound();
             }
-
             return View(sample);
         }
 
@@ -338,9 +282,49 @@ namespace DigiPax.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        // ADDITIONAL METHODS
+
+
         private bool SampleExists(int? id)
         {
             return _context.Sample.Any(e => e.Id == id);
+        }
+
+
+        //[HttpGet("{applicationUserId}/{sampleId}")]
+        public async Task<IActionResult> AddToFavorite(int sampleId)
+        {
+            ApplicationUser user = await GetCurrentUserAsync();
+            var addFav = await _context.Favorite
+                .FirstOrDefaultAsync(fav => fav.ApplicationUserId == user.Id && fav.SampleId == sampleId);
+            if (addFav == null)
+            {
+                // create a new record of favorite
+                var favorite = new Favorite();
+                // grab the current user and assign it to a variable
+                // initiate the value of properties
+                favorite.SampleId = sampleId;
+                favorite.ApplicationUser = user;
+                // saving the record to the database asynchronosly 
+                await _context.Favorite.AddAsync(favorite);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> RemoveFromFavorite(int sampleId)
+        {
+            var favorite = new Favorite();
+            ApplicationUser user = await GetCurrentUserAsync();
+            var removeFav = await _context.Favorite
+                .FirstOrDefaultAsync(fav => fav.ApplicationUserId == user.Id && fav.SampleId == sampleId);
+            if (removeFav != null)
+            {
+                _context.Favorite.Remove(removeFav);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> SearchSamples(string searchString)
